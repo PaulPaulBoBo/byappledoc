@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>{{page.title}}</title>
+
+	<link rel="stylesheet" href="css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	{{#strings.appledocData}}<meta name="generator" content="{{tool}} {{version}} (build {{build}})">{{/strings.appledocData}}
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			{{#page}}
+			<h1 id="library-title">
+				<a href="index.html">{{projectName}} {{strings.objectPage.libraryTitlePostfix}}</a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="index.html">{{projectCompany}}</a>
+			</p>
+			{{/page}}
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					{{>Navigation}}
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+        
+        <div id="overview-contents" class="container"><p></p></div>
+        <div id="overview-contents" class="container"><p></p></div>
+        <div id="overview-contents" class="container"><p></p></div>
+        <div id="overview-contents" class="container"><p></p></div>
+        <div id="overview-contents" class="container"><p></p></div>
+        <div id="overview-contents" class="container" style="background-color: #ffffff;">
+            <h4>统计信息（绿色代表注释没有问题的比例）</h4>
+            
+            <p>Total（{{page.unDocTotal}}/{{page.total}}）</p>
+            <div class="Statisticscontainer">
+                <div class="Statisticsskills" style="width: {{page.totalPercent}}%;background-color: #cc3333;">{{page.totalPercent}}%</div>
+            </div>
+            
+            <p>Class（{{page.unDocClassesTotal}}/{{page.classesTotal}}）</p>
+            <div class="Statisticscontainer">
+                <div class="Statisticsskills" style="width: {{page.classesPercent}}%;background-color: #ff9966;">{{page.classesPercent}}%</div>
+            </div>
+            <p>Category（{{page.unDocCategoriesTotal}}/{{page.categoriesTotal}}）</p>
+            <div class="Statisticscontainer">
+                <div class="Statisticsskills" style="width: {{page.blocksPercent}}%;background-color: #ff6666;">{{page.categoriesPercent}}%</div>
+            </div>
+            <p>block（{{page.unDocBlocksTotal}}/{{page.blocksTotal}}）</p>
+            <div class="Statisticscontainer">
+                <div class="Statisticsskills" style="width: {{page.blocksPercent}}%;background-color: #cc9966;">{{page.blocksPercent}}%</div>
+            </div>
+            <p>protocal（{{page.unDocProtocolsTotal}}/{{page.protocolsTotal}}）</p>
+            <div class="Statisticscontainer">
+                <div class="Statisticsskills" style="width: {{page.protocolsPercent}}%;background-color: #ffcc99;">{{page.protocolsPercent}}%</div>
+            </div>
+            <p>enum（{{page.unDoctypedefEnumsTotal}}/{{page.typedefEnumsTotal}}）</p>
+            <div class="Statisticscontainer">
+                <div class="Statisticsskills" style="width: {{page.typedefEnumsPercent}}%;background-color: #996699;">{{page.typedefEnumsPercent}}%</div>
+            </div>
+            <p>methods（{{page.unDocMethodsTotal}}/{{page.methodsTotal}}）</p>
+            <div class="Statisticscontainer">
+                <div class="Statisticsskills" style="width: {{page.methodsPercent}}%;background-color: #ccffff;">{{page.methodsPercent}}%</div>
+            </div>
+            
+            <div id="overview-contents" class="container"><p></p></div>
+            <div id="overview-contents" class="container"><p></p></div>
+        </div>
+        
+        <div id="overview-contents" class="container"><p></p></div>
+        <div id="overview-contents" class="container"><p></p></div>
+        <div id="overview-contents" class="container"><p></p></div>
+        
+		<div id="overview-contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">{{page.title}}</h1>
+
+					{{#indexDescription}}
+					<div class="section section-overview index-overview">
+						{{#comment}}
+						{{#hasLongDescription}}
+						{{#longDescription}}{{#components}}{{&htmlValue}}{{/components}}{{/longDescription}}
+						{{/hasLongDescription}}
+						{{/comment}}
+					</div>
+					{{/indexDescription}}
+
+					<div class="index-container">
+						{{#hasDocs}}
+						<div class="index-column">
+							<h2 class="index-title">{{page.docsTitle}}</h2>
+							<ul>
+								{{#docs}}
+								<li><a href="{{href}}">{{title}}</a></li>
+								{{/docs}}
+							</ul>
+						</div>
+						{{/hasDocs}}
+
+						{{#hasClasses}}
+						<div class="index-column">
+							<h2 class="index-title">{{strings.indexPage.classesTitle}}</h2>
+							<ul>
+								{{#classes}}
+								<li><a href="{{href}}">{{title}}</a></li>
+								{{/classes}}
+							</ul>
+						</div>
+						{{/hasClasses}}
+
+						{{#hasProtocolsOrCategories}}
+						<div class="index-column">
+							{{#hasProtocols}}
+							<h2 class="index-title">{{strings.indexPage.protocolsTitle}}</h2>
+							<ul>
+								{{#protocols}}
+								<li><a href="{{href}}">{{title}}</a></li>
+								{{/protocols}}
+							</ul>
+							{{/hasProtocols}}
+
+							{{#hasConstants}}
+							<h2 class="index-title">{{strings.indexPage.constantsTitle}}</h2>
+							<ul>
+								{{#constants}}
+									<li><a href="{{href}}">{{title}}</a></li>
+								{{/constants}}
+							</ul>
+							{{/hasConstants}}
+
+							{{#hasCategories}}
+							<h2 class="index-title">{{strings.indexPage.categoriesTitle}}</h2>
+							<ul>
+								{{#categories}}
+								<li><a href="{{href}}">{{title}}</a></li>
+								{{/categories}}
+							</ul>
+							{{/hasCategories}}
+						</div>
+						{{/hasProtocolsOrCategories}}
+					</div>
+
+					<footer>
+						<div class="footer-copyright">
+							{{#page}}
+							<p class="copyright">Copyright &copy; {{copyrightDate}} {{copyrightHolder}}. All rights reserved. Updated: {{lastUpdatedDate}}</p>
+							{{/page}}
+							{{#strings.appledocData}}
+							<p class="generator">Generated by <a href="{{homepage}}">{{tool}} {{version}} (build {{build}})</a>.</p>
+							{{/strings.appledocData}}
+						</div>
+					</footer>
+				</main>
+			</div>
+		</div>
+	</article>
+    
+	<script src="js/script.js"></script>
+</body>
+</html>
+
+Section Navigation
+<li><a href="hierarchy.html">Hierarchy</a></li>
+EndSection
