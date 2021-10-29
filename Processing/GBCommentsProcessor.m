@@ -39,20 +39,25 @@
 }
 
 - (BOOL) matchesObject:(id) object {
-    if ([object isKindOfClass:[GBClassData class]])
+    if ([object isKindOfClass:[GBClassData class]]) {
         return [self.description isEqualToString:[object nameOfClass]];
-    else if ([object isKindOfClass:[GBCategoryData class]])
+    } else if ([object isKindOfClass:[GBCategoryData class]]) {
         return [self.description isEqualToString:[object idOfCategory]];
-    else if ([object isKindOfClass:[GBProtocolData class]])
+    } else if ([object isKindOfClass:[GBProtocolData class]]) {
         return [self.description isEqualToString:[object nameOfProtocol]];
-    else if ([object isKindOfClass:[GBTypedefEnumData class]])
+    } else if ([object isKindOfClass:[GBTypedefEnumData class]]){
         return [self.description isEqualToString:[object nameOfEnum]];
-    else if ([object isKindOfClass:[GBTypedefBlockData class]])
+    } else if ([object isKindOfClass:[GBTypedefBlockData class]]) {
         return [self.description isEqualToString:[object nameOfBlock]];
-    else if ([object isKindOfClass:[GBDocumentData class]])
+    } else if ([object isKindOfClass:[GBDocumentData class]]) {
         return NO;
-    else
-        return [[object methodSelector] isEqualToString:self.description];
+    } else {
+        GBLogWarn(@"IS:%@", [object isKindOfClass:[GBTypedefEnumData class]])
+        GBLogWarn(@"object description:%@", [object description])
+        GBLogWarn(@"self.description:%@", self.description)
+        GBLogWarn(@"object:%@", object);
+        return [[object description] isEqualToString:self.description];;
+    }
 }
 
 - (NSComparisonResult) compareLocation:(GBCrossRefData *) object {
