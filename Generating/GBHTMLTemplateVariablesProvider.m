@@ -64,11 +64,16 @@
 - (NSString *)docsSectionTitleForIndex;
 - (NSArray *)documentsForIndex;
 - (NSArray *)classesForIndex;
+- (NSArray *)classesForUnDocIndex;
 - (NSArray *)categoriesForIndex;
+- (NSArray *)categoriesForUnDocIndex;
 - (NSArray *)protocolsForIndex;
+- (NSArray *)protocolsForUnDocIndex;
 - (NSArray *)classesForHierarchy;
 - (NSArray *)constantsForIndex;
+- (NSArray *)constantsForUnDocIndex;
 - (NSArray *)blocksForIndex;
+- (NSArray *)blocksForUnDocIndex;
 - (NSArray *)arrayFromHierarchyLevel:(NSDictionary *)level;
 - (void)registerObjectsUsageForIndexInDictionary:(NSMutableDictionary *)dict;
 
@@ -238,12 +243,65 @@
     result[@"strings"] = self.settings.stringTemplates;
     result[@"projectCompany"] = self.settings.projectCompany;
     result[@"projectName"] = self.settings.projectName;
-    result[@"classesTotal"] = [NSString stringWithFormat:@"%@", @(sto.classes.count)];
+    [self addCustomDocumentWithKey:kGBCustomDocumentIndexDescKey toDictionary:result key:@"indexDescription"];
+    [self registerObjectsUsageForIndexInDictionary:result];
+    return result;
+}
+
+- (NSDictionary *)variablesForUnDocIndexWithStore:(id)aStore {
+    self.store = aStore;
+    NSMutableDictionary *page = [NSMutableDictionary dictionary];
+    page[@"title"] = [self pageTitleForIndex];
+    page[@"docsTitle"] = [self docsSectionTitleForIndex];
+    
+    GBStore *sto = ((GBStore *)aStore);
+    NSInteger total = sto.classes.count+sto.protocols.count+sto.blocks.count+sto.constants.count+sto.categories.count+sto.methods.count;
+    NSInteger unDocTotal = sto.unDocClasses.count+sto.unDocProtocols.count+sto.unDocBlocks.count+sto.unDocConstants.count+sto.unDocCategories.count+sto.unDocMethods.count;
+    
+    page[@"classesTotal"] = [NSString stringWithFormat:@"%@", @(sto.classes.count)];
+    page[@"protocolsTotal"] = [NSString stringWithFormat:@"%@", @(sto.protocols.count)];
+    page[@"blocksTotal"] = [NSString stringWithFormat:@"%@", @(sto.blocks.count)];
+    page[@"typedefEnumsTotal"] = [NSString stringWithFormat:@"%@", @(sto.constants.count)];
+    page[@"categoriesTotal"] = [NSString stringWithFormat:@"%@", @(sto.categories.count)];
+    page[@"methodsTotal"] = [NSString stringWithFormat:@"%@", @(sto.methods.count)];
+    page[@"total"] = [NSString stringWithFormat:@"%@", @(total)];
+    
+    page[@"unDocClassesTotal"] = [NSString stringWithFormat:@"%@", @(sto.unDocClasses.count)];
+    page[@"unDocProtocolsTotal"] = [NSString stringWithFormat:@"%@", @(sto.unDocProtocols.count)];
+    page[@"unDocBlocksTotal"] = [NSString stringWithFormat:@"%@", @(sto.unDocBlocks.count)];
+    page[@"unDoctypedefEnumsTotal"] = [NSString stringWithFormat:@"%@", @(sto.unDocConstants.count)];
+    page[@"unDocCategoriesTotal"] = [NSString stringWithFormat:@"%@", @(sto.unDocCategories.count)];
+    page[@"unDocMethodsTotal"] = [NSString stringWithFormat:@"%@", @(sto.unDocMethods.count)];
+    page[@"unDocTotal"] = [NSString stringWithFormat:@"%@", @(unDocTotal)];
+    
+    page[@"classesPercent"] = [NSString stringWithFormat:@"%.2lf", sto.classes.count==0?0:sto.unDocClasses.count*100./sto.classes.count];
+    page[@"protocolsPercent"] = [NSString stringWithFormat:@"%.2lf", sto.protocols.count==0?0:sto.unDocProtocols.count*100./sto.protocols.count];
+    page[@"blocksPercent"] = [NSString stringWithFormat:@"%.2lf", sto.blocks.count==0?0:sto.unDocBlocks.count*100./sto.blocks.count];
+    page[@"typedefEnumsPercent"] = [NSString stringWithFormat:@"%.2lf", sto.constants.count==0?0:sto.unDocConstants.count*100./sto.constants.count];
+    page[@"categoriesPercent"] = [NSString stringWithFormat:@"%.2lf", sto.categories.count==0?0:sto.unDocCategories.count*100./sto.categories.count];
+    page[@"methodsPercent"] = [NSString stringWithFormat:@"%.2lf", sto.methods.count==0?0:sto.unDocMethods.count*100./sto.methods.count];
+    page[@"totalPercent"] = [NSString stringWithFormat:@"%.2lf", total==0?0:unDocTotal*100./total];
+    
+    [self addFooterVarsToDictionary:page];
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    result[@"page"] = page;
+    result[@"docs"] = [self documentsForIndex];
+    
+    result[@"classes"] = [self classesForUnDocIndex];
+    result[@"protocols"] = [self protocolsForUnDocIndex];
+    result[@"categories"] = [self categoriesForUnDocIndex];
+    result[@"constants"] = [self constantsForUnDocIndex];
+    result[@"blocks"] = [self blocksForUnDocIndex];
+    
+    result[@"strings"] = self.settings.stringTemplates;
+    result[@"projectCompany"] = self.settings.projectCompany;
+    result[@"projectName"] = self.settings.projectName;
     
     [self addCustomDocumentWithKey:kGBCustomDocumentIndexDescKey toDictionary:result key:@"indexDescription"];
     [self registerObjectsUsageForIndexInDictionary:result];
     return result;
 }
+
 
 - (NSDictionary *)variablesForHierarchyWithStore:(id)aStore {
     self.store = aStore;
@@ -588,6 +646,21 @@
     return result;
 }
 
+- (NSArray *)classesForUnDocIndex {
+    NSArray *classes = [self.store classesSortedByName];
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:[classes count]];
+    for (GBClassData *class in classes) {
+        if(!(class.comment && [class.comment.stringValue length] > 0)) {
+            if (!class.includeInOutput) continue;
+            NSMutableDictionary *data = [NSMutableDictionary dictionaryWithCapacity:2];
+            data[@"href"] = [self hrefForObject:class fromObject:nil];
+            data[@"title"] = class.nameOfClass;
+            [result addObject:data];
+        }
+    }
+    return result;
+}
+
 - (NSArray *)categoriesForIndex {
     NSArray *categories = [self.store categoriesSortedByName];
     NSMutableArray *result = [NSMutableArray arrayWithCapacity:[categories count]];
@@ -597,6 +670,21 @@
         data[@"href"] = [self hrefForObject:category fromObject:nil];
         data[@"title"] = category.idOfCategory;
         [result addObject:data];
+    }
+    return result;
+}
+
+- (NSArray *)categoriesForUnDocIndex {
+    NSArray *categories = [self.store categoriesSortedByName];
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:[categories count]];
+    for (GBCategoryData *category in categories) {
+        if(!(category.comment && [category.comment.stringValue length] > 0)) {
+            if (!category.includeInOutput) continue;
+            NSMutableDictionary *data = [NSMutableDictionary dictionaryWithCapacity:2];
+            data[@"href"] = [self hrefForObject:category fromObject:nil];
+            data[@"title"] = category.idOfCategory;
+            [result addObject:data];
+        }
     }
     return result;
 }
@@ -614,6 +702,21 @@
     return result;
 }
 
+- (NSArray *)constantsForUnDocIndex {
+    NSArray *constants = [self.store constantsSortedByName];
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:[constants count]];
+    for (GBTypedefEnumData *constant in constants) {
+        if(!(constant.comment && [constant.comment.stringValue length] > 0)) {
+            if (!constant.includeInOutput) continue;
+            NSMutableDictionary *data = [NSMutableDictionary dictionaryWithCapacity:2];
+            data[@"href"] = [self hrefForObject:constant fromObject:nil];
+            data[@"title"] = constant.nameOfEnum;
+            [result addObject:data];
+        }
+    }
+    return result;
+}
+
 - (NSArray *)blocksForIndex {
     NSArray *blocks = [self.store blocksSortedByName];
     NSMutableArray *result = [NSMutableArray arrayWithCapacity:[blocks count]];
@@ -627,6 +730,21 @@
     return result;
 }
 
+- (NSArray *)blocksForUnDocIndex {
+    NSArray *blocks = [self.store blocksSortedByName];
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:[blocks count]];
+    for (GBTypedefBlockData *block in blocks) {
+        if(!(block.comment && [block.comment.stringValue length] > 0)) {
+            if (!block.includeInOutput) continue;
+            NSMutableDictionary *data = [NSMutableDictionary dictionaryWithCapacity:2];
+            data[@"href"] = [self hrefForObject:block fromObject:nil];
+            data[@"title"] = block.nameOfBlock;
+            [result addObject:data];
+        }
+    }
+    return result;
+}
+
 - (NSArray *)protocolsForIndex {
     NSArray *protocols = [self.store protocolsSortedByName];
     NSMutableArray *result = [NSMutableArray arrayWithCapacity:[protocols count]];
@@ -636,6 +754,21 @@
         data[@"href"] = [self hrefForObject:protocol fromObject:nil];
         data[@"title"] = protocol.nameOfProtocol;
         [result addObject:data];
+    }
+    return result;
+}
+
+- (NSArray *)protocolsForUnDocIndex {
+    NSArray *protocols = [self.store protocolsSortedByName];
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:[protocols count]];
+    for (GBProtocolData *protocol in protocols) {
+        if(!(protocol.comment && [protocol.comment.stringValue length] > 0)) {
+            if (!protocol.includeInOutput) continue;
+            NSMutableDictionary *data = [NSMutableDictionary dictionaryWithCapacity:2];
+            data[@"href"] = [self hrefForObject:protocol fromObject:nil];
+            data[@"title"] = protocol.nameOfProtocol;
+            [result addObject:data];
+        }
     }
     return result;
 }

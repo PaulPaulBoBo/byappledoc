@@ -33,7 +33,7 @@
     NSMutableSet *_documents;
     NSMutableDictionary *_documentsByName;
     NSMutableSet *_typedefEnums;
-    NSMutableSet *_unDocTypedefEnums;
+    NSMutableSet *_unDocConstants;
     NSMutableDictionary *_typedefEnumsByName;
     NSMutableSet *_typedefBlocks;
     NSMutableSet *_unDocTypedefBlocks;

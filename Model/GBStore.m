@@ -31,7 +31,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(GBStore, sharedStore);
         _documents = [[NSMutableSet alloc] init];
         _documentsByName = [[NSMutableDictionary alloc] init];
         _typedefEnums = [[NSMutableSet alloc] init];
-        _unDocTypedefEnums = [[NSMutableSet alloc] init];
+        _unDocConstants = [[NSMutableSet alloc] init];
         _typedefEnumsByName = [[NSMutableDictionary alloc] init];
         _typedefBlocks = [[NSMutableSet alloc] init];
         _unDocBlocks = [[NSMutableSet alloc] init];

@@ -52,11 +52,14 @@
     } else if ([object isKindOfClass:[GBDocumentData class]]) {
         return NO;
     } else {
-        GBLogWarn(@"IS:%@", [object isKindOfClass:[GBTypedefEnumData class]])
-        GBLogWarn(@"object description:%@", [object description])
-        GBLogWarn(@"self.description:%@", self.description)
-        GBLogWarn(@"object:%@", object);
-        return [[object description] isEqualToString:self.description];;
+//        BOOL re = NO;
+//        @try {
+//            re = [[object methodSelector] isEqualToString:self.description];
+//        }
+//        @finally {
+//            re = [[object description] isEqualToString:self.description];
+//        }
+        return NO;
     }
 }
 

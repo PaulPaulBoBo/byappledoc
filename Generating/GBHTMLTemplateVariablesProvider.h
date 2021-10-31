@@ -126,6 +126,7 @@
  @see variablesForHierarchyWithStore:
  */
 - (NSDictionary *)variablesForIndexWithStore:(id)store;
+- (NSDictionary *)variablesForUnDocIndexWithStore:(id)store;
 
 /** Returns the variables for the hierarchy file using the given `GBStore` for links. 
  

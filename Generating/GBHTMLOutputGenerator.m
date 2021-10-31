@@ -23,6 +23,7 @@
 - (BOOL)processConstants:(NSError **)error;
 - (BOOL)processBlocks:(NSError **)error;
 - (BOOL)processIndex:(NSError **)error;
+- (BOOL)processUnDocIndex:(NSError **)error;
 - (BOOL)processHierarchy:(NSError **)error;
 - (NSString *)stringByCleaningHtml:(NSString *)string;
 - (NSString *)htmlOutputPathForIndex;
@@ -51,6 +52,7 @@
     if (![self processConstants:error]) return NO;
     if (![self processBlocks:error]) return NO;
     if (![self processIndex:error]) return NO;
+    if (![self processUnDocIndex:error]) return NO;
     if (![self processHierarchy:error]) return NO;
     return YES;
 }
@@ -185,6 +187,22 @@
     return YES;
 }
 
+- (BOOL)processUnDocIndex:(NSError **)error {
+    GBLogInfo(@"Generating output for index...");
+    if ([self.store.unDocClasses count] > 0 || [self.store.unDocProtocols count] > 0 || [self.store.unDocCategories count] > 0 || [self.store.unDocConstants count] > 0 || [self.store.unDocBlocks count] > 0) {
+        NSDictionary *vars = [self.variablesProvider variablesForUnDocIndexWithStore:self.store];
+        NSString *output = [self.htmlUnDocIndexTemplate renderObject:vars];
+        NSString *cleaned = [self stringByCleaningHtml:output];
+        NSString *path = [[self htmlOutputPathForUnDocIndex] stringByStandardizingPath];
+        if (![self writeString:cleaned toFile:[path stringByStandardizingPath] error:error]) {
+            GBLogWarn(@"Failed writing HTML index to '%@'!", path);
+            return NO;
+        }
+    }
+    GBLogDebug(@"Finished generating output for index.");
+    return YES;
+}
+
 - (BOOL)processHierarchy:(NSError **)error {
     GBLogInfo(@"Generating output for hierarchy...");
     if ([self.store.classes count] > 0 || [self.store.protocols count] > 0 || [self.store.categories count] > 0 || [self.store.constants count] > 0 || [self.store.blocks count] > 0) {
@@ -245,6 +263,11 @@
     return [self htmlOutputPathForTemplateName:@"index-template.html"];
 }
 
+- (NSString *)htmlOutputPathForUnDocIndex {
+    // Returns file name including full path for HTML file representing the main index.
+    return [self htmlOutputPathForTemplateName:@"undoc-index-template.html"];
+}
+
 - (NSString *)htmlOutputPathForHierarchy {
     // Returns file name including full path for HTML file representing the main hierarchy.
     return [self htmlOutputPathForTemplateName:@"hierarchy-template.html"];
@@ -278,6 +301,10 @@
 
 - (GBTemplateHandler *)htmlIndexTemplate {
     return self.templateFiles[@"index-template.html"];
+}
+
+- (GBTemplateHandler *)htmlUnDocIndexTemplate {
+    return self.templateFiles[@"undoc-index-template.html"];
 }
 
 - (GBTemplateHandler *)htmlHierarchyTemplate {
