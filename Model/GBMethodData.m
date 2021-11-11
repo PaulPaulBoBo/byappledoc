@@ -153,7 +153,9 @@
                     return;
                 }
                 if (isSetterOrGetter) {
-                    if ([attribute isEqualToString:@"="]) return;
+                    if ([attribute isEqualToString:@"="]) {
+                        return;
+                    }
                     isSetterOrGetter = NO;
                 }
                 if (idx < [self.methodAttributes count]-1) {
@@ -355,13 +357,19 @@
             return NO;
         } else {
             return NO;
-//            [NSException raise:@"Failed merging %@ to %@; method type doesn't match!", source, self];
+            //            [NSException raise:@"Failed merging %@ to %@; method type doesn't match!", source, self];
         }
         
         // We should allow if the getter or setter matches and if the getter name is shared to an instance method.
-        if ([propertyData.propertyGetterSelector isEqualToString:manualData.methodSelector]) return YES;
-        if ([propertyData.propertySetterSelector isEqualToString:manualData.methodSelector]) return YES;
-        if (![propertyData.propertyType isEqualToString:manualData.methodReturnType]) return YES;
+        if ([propertyData.propertyGetterSelector isEqualToString:manualData.methodSelector]) {
+            return YES;
+        }
+        if ([propertyData.propertySetterSelector isEqualToString:manualData.methodSelector]) {
+            return YES;
+        }
+        if (![propertyData.propertyType isEqualToString:manualData.methodReturnType]) {
+            return YES;
+        }
         [NSException raise:@"Failed merging %@ to %@; getter or setter doesn't match", source, self];
     } else {
         // If assertion from code below is present, it breaks cases where category declares a property which is also getter for a property from class declaration. See #184 https://github.com/tomaz/appledoc/issues/184 for details. I'm leaving the code commented for the moment to see if it also affects some other user (don't think so, but just in case).
@@ -373,10 +381,14 @@
 #pragma mark Overidden methods
 
 - (void)mergeDataFromObject:(id)source {
-    if (!source || source == self) return;
+    if (!source || source == self) {
+        return;
+    }
     GBLogDebug(@"%@:Merging data from %@...", self, source);
-    if (![self validateMergeWith:source]) return;
-
+    if (![self validateMergeWith:source]) {
+        return;
+    }
+    
     // Use argument var names from the method that has comment. If no method has comment, just keep deafult.
     if ([source comment] && ![self comment]) {
         GBLogDebug(@"%@:Checking for difference due to comment status...", self);

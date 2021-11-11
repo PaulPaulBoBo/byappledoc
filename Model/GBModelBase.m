@@ -49,8 +49,8 @@
     GBComment *theComment = [(GBModelBase *)source comment];
     if (self.comment && theComment) {
         GBLogXInfo(self.prefferedSourceInfo, @"%@:Comment found in %@ and %@", self, self.comment.sourceInfo, theComment.sourceInfo);
-        return;
-    }
+            return;
+        }
     if (!self.comment && theComment) self.comment = theComment;
 }
 
@@ -60,7 +60,9 @@
     NSParameterAssert(data != nil);
     
     // Ignore already registered objects.
-    if ([_sourceInfos member:data]) return;
+    if ([_sourceInfos member:data]) {
+        return;
+    }
     
     // Replace data with same filename.
     GBSourceInfo *existing = _sourceInfosByFilenames[data.filename];

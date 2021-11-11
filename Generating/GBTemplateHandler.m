@@ -57,7 +57,9 @@ static NSString *kGBValueKey = @"value";
 
 - (BOOL)parseTemplate:(NSString *)template error:(NSError **)error {
     [self clearParsedValues];
-    if ([template length] == 0) return YES;
+    if ([template length] == 0) {
+        return YES;
+    }
     NSString *regex = @"(Section\\s+(\\w+)\\s+(.*?)\\s+EndSection)";
     NSString *clean = [template copy];
     while (YES) {

@@ -154,7 +154,7 @@
     }
     
     //check mandatory... 1 file at least
-    if( !_mutableFilesBuffer.count) {
+    if(!_mutableFilesBuffer.count) {
         if(pError)
             *pError = [NSError errorWithDomain:@"DDXcodeProjectFile" code:0 userInfo:@{NSLocalizedDescriptionKey:@"cannot find manatory attributes in plist from file contents"}];
         return NO;

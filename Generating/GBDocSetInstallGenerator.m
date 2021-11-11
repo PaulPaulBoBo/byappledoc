@@ -24,7 +24,9 @@
     GBLogInfo(@"Installing DocSet...");
     
     // Prepare for run.
-    if (![super generateOutputWithStore:store error:error]) return NO;
+    if (![super generateOutputWithStore:store error:error]) {
+        return NO;
+    }
     
     // Prepare source path and file name.
     NSString *sourceUserPath = self.inputUserPath;

@@ -59,15 +59,21 @@
     if (self.settings.createMarkdown) {
         [self.outputGenerators addObject:[GBMarkdownOutputGenerator generatorWithSettingsProvider:self.settings]];
     }
-    if (!self.settings.createHTML) return;
+    if (!self.settings.createHTML) {
+        return;
+    }
     [self.outputGenerators addObject:[GBHTMLOutputGenerator generatorWithSettingsProvider:self.settings]];
-    if (!self.settings.createDocSet) return;
+    if (!self.settings.createDocSet) {
+        return;
+    }
     [self.outputGenerators addObject:[GBDocSetOutputGenerator generatorWithSettingsProvider:self.settings]];
     [self.outputGenerators addObject:[GBDocSetFinalizeGenerator generatorWithSettingsProvider:self.settings]];
     if (self.settings.installDocSet) {
         [self.outputGenerators addObject:[GBDocSetInstallGenerator generatorWithSettingsProvider:self.settings]];
     }
-    if (!self.settings.publishDocSet) return;
+    if (!self.settings.publishDocSet) {
+        return;
+    }
     [self.outputGenerators addObject:[GBDocSetPublishGenerator generatorWithSettingsProvider:self.settings]];
 }
 
@@ -80,10 +86,10 @@
     }
     
     __block GBOutputGenerator *previous = nil;
-    [self.outputGenerators enumerateObjectsUsingBlock:^(GBOutputGenerator *generator, NSUInteger idx, BOOL *stop) {        
+    [self.outputGenerators enumerateObjectsUsingBlock:^(GBOutputGenerator *generator, NSUInteger idx, BOOL *stop) {
         NSError *error = nil;
         NSUInteger index = idx + 1;
-        GBLogVerbose(@"Generation step %ld/%ld:Running %@...", index, stepsCount, [generator className]);
+        GBLogWarn(@"Generation step %ld/%ld:Running %@...", index, stepsCount, [generator className]);
         generator.previousGenerator = previous;
         if (![generator copyTemplateFilesToOutputPath:&error]) {
             GBLogNSError(error, @"Generation step %ld/%ld failed:%@ failed copying template files to output, aborting!", index, stepsCount, [generator className]);

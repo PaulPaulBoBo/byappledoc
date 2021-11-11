@@ -89,12 +89,14 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(GBStore, sharedStore);
 - (void)registerClass:(GBClassData *)class {
     NSParameterAssert(class != nil);
     GBLogDebug(@"Registering class %@...", class);
-    if ([_classes containsObject:class]) return;
+    if ([_classes containsObject:class]) {
+        return;
+    }
     GBClassData *existingClass = _classesByName[class.nameOfClass];
     if (existingClass) {
         [existingClass mergeDataFromObject:class];
-        return;
-    }
+            return;
+        }
     [_classes addObject:class];
     _classesByName[class.nameOfClass] = class;
 }
@@ -102,13 +104,15 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(GBStore, sharedStore);
 - (void)registerCategory:(GBCategoryData *)category {
     NSParameterAssert(category != nil);
     GBLogDebug(@"Registering category %@...", category);
-    if ([_categories containsObject:category]) return;
+    if ([_categories containsObject:category]) {
+        return;
+    }
     NSString *categoryID = [NSString stringWithFormat:@"%@(%@)", category.nameOfClass, category.nameOfCategory ? category.nameOfCategory :@""];
     GBCategoryData *existingCategory = _categoriesByName[categoryID];
     if (existingCategory) {
         [existingCategory mergeDataFromObject:category];
-        return;
-    }
+            return;
+        }
     [_categories addObject:category];
     _categoriesByName[categoryID] = category;
 }
@@ -116,12 +120,14 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(GBStore, sharedStore);
 - (void)registerProtocol:(GBProtocolData *)protocol {
     NSParameterAssert(protocol != nil);
     GBLogDebug(@"Registering class %@...", protocol);
-    if ([_protocols containsObject:protocol]) return;
+    if ([_protocols containsObject:protocol]) {
+        return;
+    }
     GBProtocolData *existingProtocol = _protocolsByName[protocol.nameOfProtocol];
     if (existingProtocol) {
         [existingProtocol mergeDataFromObject:protocol];
-        return;
-    }
+            return;
+        }
     [_protocols addObject:protocol];
     _protocolsByName[protocol.nameOfProtocol] = protocol;
 }
@@ -129,12 +135,14 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(GBStore, sharedStore);
 -(void)registerTypedefEnum:(GBTypedefEnumData *)typedefEnum {
     NSParameterAssert(typedefEnum != nil);
     GBLogDebug(@"Registering typedef enum %@...", typedefEnum);
-    if ([_typedefEnums containsObject:typedefEnum]) return;
+    if ([_typedefEnums containsObject:typedefEnum]) {
+        return;
+    }
     GBProtocolData *existingTypedef = _typedefEnumsByName[typedefEnum.nameOfEnum];
     if (existingTypedef) {
         GBLogWarn(@"Ignoring typedef enum %@, already defined.", typedefEnum);
-        return;
-    }
+            return;
+        }
 
     [_typedefEnums addObject:typedefEnum];
     _typedefEnumsByName[typedefEnum.nameOfEnum] = typedefEnum;
@@ -143,12 +151,14 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(GBStore, sharedStore);
 -(void)registerTypedefBlock:(GBTypedefBlockData *)typedefBlock {
     NSParameterAssert(typedefBlock != nil);
     GBLogDebug(@"Registering typedef block %@...", typedefBlock);
-    if ([_typedefBlocks containsObject:typedefBlock]) return;
+    if ([_typedefBlocks containsObject:typedefBlock]) {
+        return;
+    }
     GBProtocolData *existingTypedef = _typedefBlocksByName[typedefBlock.nameOfBlock];
     if (existingTypedef) {
         GBLogWarn(@"Ignoring typedef block %@, already defined.", typedefBlock);
-        return;
-    }
+            return;
+        }
     
     [_typedefBlocks addObject:typedefBlock];
     _typedefBlocksByName[typedefBlock.nameOfBlock] = typedefBlock;
@@ -157,13 +167,15 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(GBStore, sharedStore);
 - (void)registerDocument:(GBDocumentData *)document {
     NSParameterAssert(document != nil);
     GBLogDebug(@"Registering document %@...", document);
-    if ([_documents containsObject:document]) return;
+    if ([_documents containsObject:document]) {
+        return;
+    }
     NSString *name = [document.nameOfDocument stringByDeletingPathExtension];
     GBDocumentData *existingDocument = _documentsByName[name];
     if (existingDocument) {
         GBLogWarn(@"Ignoring document %@, already defined.", document);
-        return;
-    }
+            return;
+        }
 
     [_documents addObject:document];
     _documentsByName[name] = document;
@@ -181,18 +193,18 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(GBStore, sharedStore);
     if ([_classes containsObject:object]) {
         [_classes removeObject:object];
         [_classesByName removeObjectForKey:[object nameOfClass]];
-        return;
-    }
+            return;
+        }
     if ([_categories containsObject:object]) {
         [_categories removeObject:object];
         [_categoriesByName removeObjectForKey:[object idOfCategory]];
-        return;
-    }
+            return;
+        }
     if ([_protocols containsObject:object]) {
         [_protocols removeObject:object];
         [_protocolsByName removeObjectForKey:[object nameOfProtocol]];
-        return;
-    }
+            return;
+        }
 }
 
 #pragma mark Data providing

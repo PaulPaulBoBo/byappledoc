@@ -34,7 +34,9 @@
     NSMutableString *result = [NSMutableString stringWithCapacity:[self length]];
     NSArray *words = [self arrayOfWords];
     [words enumerateObjectsUsingBlock:^(NSString *word, NSUInteger idx, BOOL *stop) {
-        if ([word length] == 0) return;
+        if ([word length] == 0) {
+            return;
+        }
         if ([result length] > 0) [result appendString:@" "];
         [result appendString:word];
     }];

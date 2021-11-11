@@ -353,7 +353,9 @@
 - (void)addCustomDocumentWithKey:(id)key toDictionary:(NSMutableDictionary *)dict key:(id)dictKey {
     // Adds custom document with the given key to the given dictionary using the given dictionary key. If custom document isn't found, nothing happens.
     GBDocumentData *document = [self.store customDocumentWithKey:key];
-    if (!document) return;
+    if (!document) {
+        return;
+    }
     dict[dictKey] = document;
 }
 
@@ -465,7 +467,9 @@
 
 - (void)registerObjectInheritsFromSpecificationForClass:(GBClassData *)class toArray:(NSMutableArray *)array {
     // Prepares inherits from specification with complete superclass hierarchy values for the given class and adds it to the end of the given array. If the class doesn't have superclass, nothing happens.
-    if (!class.nameOfSuperclass) return;
+    if (!class.nameOfSuperclass) {
+        return;
+    }
     NSMutableArray *superclasses = [NSMutableArray array];
     GBClassData *itor = class;
     while (itor) {
@@ -484,7 +488,9 @@
 
 - (void)registerObjectConformsToSpecificationForProvider:(id<GBObjectDataProviding>)provider toArray:(NSMutableArray *)array {
     // Prepares conforms to specification with all protocols the class conforms to for the given provider and adds it to the end of the given array. If the object doesn't conform to any protocol, nothing happens.
-    if ([provider.adoptedProtocols.protocols count] == 0) return;
+    if ([provider.adoptedProtocols.protocols count] == 0) {
+        return;
+    }
     NSMutableArray *protocols = [NSMutableArray arrayWithCapacity:[provider.adoptedProtocols.protocols count]];
     NSArray *adoptedProtocols = [provider.adoptedProtocols protocolsSortedByName];
     [adoptedProtocols enumerateObjectsUsingBlock:^(GBProtocolData *protocol, NSUInteger idx, BOOL *stop) {
@@ -501,7 +507,9 @@
 
 - (void)registerObjectDeclaredInSpecificationForProvider:(GBModelBase *)provider toArray:(NSMutableArray *)array {
     // Prepares declared in specification with all source files the given object is declared in and adds it to the end of the given array. If the object doesn't contain any source information, nothing happens.
-    if ([provider.sourceInfos count] == 0) return;
+    if ([provider.sourceInfos count] == 0) {
+        return;
+    }
     NSMutableArray *specifications = [NSMutableArray arrayWithCapacity:[provider.sourceInfos count]];
     NSArray *infos = [provider sourceInfosSortedByName];
     [infos enumerateObjectsUsingBlock:^(GBSourceInfo *info, NSUInteger idx, BOOL *stop) {
@@ -517,7 +525,9 @@
 
 - (void)registerObjectAvailabilitySpecificationForProvider:(GBModelBase *)provider toArray:(NSMutableArray *)array {
     
-    if([provider.comment.availability.components count] == 0) return;
+    if([provider.comment.availability.components count] == 0) {
+        return;
+    }
     
     NSMutableArray *specifications = [NSMutableArray arrayWithCapacity:[provider.comment.availability.components count]];
     NSArray *infos = provider.comment.availability.components;
@@ -534,7 +544,9 @@
 
 - (void)registerObjectReferenceSpecificationForProvider:(GBModelBase *)provider toArray:(NSMutableArray *)array {
     // Prepares declared in specification with all source files the given object is declared in and adds it to the end of the given array. If the object doesn't contain any source information, nothing happens.
-    if ([provider.comment.relatedItems.components count] == 0) return;
+    if ([provider.comment.relatedItems.components count] == 0) {
+        return;
+    }
     
     NSMutableArray *specifications = [NSMutableArray arrayWithCapacity:[provider.comment.relatedItems.components count]];
     NSArray *infos = provider.comment.relatedItems.components;
@@ -552,7 +564,9 @@
 
 - (void)registerObjectCompanionGuidesSpecificationForObject:(GBModelBase *)object toArray:(NSMutableArray *)array {
     // Prepares companion guides specification with links to all static documents listed in related items of the given object. If the object doesn't contain any related static document, nothing happens.
-    if (!object.comment || !object.comment.hasRelatedItems) return;
+    if (!object.comment || !object.comment.hasRelatedItems) {
+        return;
+    }
     NSMutableArray *relatedDocuments = [NSMutableArray array];
     [object.comment.relatedItems.components enumerateObjectsUsingBlock:^(GBCommentComponent *item, NSUInteger idx, BOOL *stop) {
         if ([item.relatedItem isStaticDocument]) {
@@ -565,7 +579,9 @@
             }
         }
     }];
-    if ([relatedDocuments count] == 0) return;
+    if ([relatedDocuments count] == 0) {
+        return;
+    }
     NSArray *values = [self delimitObjectSpecificationValues:relatedDocuments withDelimiter:@"<br />"];
     NSString *title = [self.settings.stringTemplates valueForKeyPath:@"objectSpecifications.companionGuide"];
     NSDictionary *data = [self objectSpecificationWithValues:values title:title];
@@ -847,3 +863,4 @@
 }
 
 @end
+

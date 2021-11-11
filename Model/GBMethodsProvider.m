@@ -75,12 +75,14 @@
     // Note that we allow adding several methods with the same selector as long as the type is different (i.e. class and instance methods). In such case, methodBySelector will preffer instance method or property to class method! Note that this could be implemented more inteligently by prefixing selectors with some char or similar and then handling that within methodBySelector:and prefer instance/property in there. However at the time being current code seems sufficient and simpler, so let's stick with it for a while...
     NSParameterAssert(method != nil);
     GBLogDebug(@"%@:Registering method %@...", _parent, method);
-    if ([_methods containsObject:method]) return;
+    if ([_methods containsObject:method]) {
+        return;
+    }
     GBMethodData *existingMethod = _methodsBySelectors[method.methodSelector];
     if (existingMethod && existingMethod.methodType == method.methodType) {
         [existingMethod mergeDataFromObject:method];
-        return;
-    }
+            return;
+        }
     
     method.parentObject = _parent;
     [_methods addObject:method];    
@@ -108,7 +110,9 @@
     }
 
     // Register the selector so that we can handle existing methods later on. The first line prefers instance to class methods!
-    if (existingMethod && existingMethod.methodType != GBMethodTypeClass) return;
+    if (existingMethod && existingMethod.methodType != GBMethodTypeClass) {
+        return;
+    }
     _methodsBySelectors[method.methodSelector] = method;
 }
 
@@ -167,7 +171,9 @@
 
 - (void)mergeDataFromMethodsProvider:(GBMethodsProvider *)source {
     // If a method with the same selector is found while merging from source, we should check if the type also matches. If so, we can merge the data from the source's method. However if the type doesn't match, we should ignore the method alltogether (ussually this is due to custom property implementation). We should probably deal with this scenario more inteligently, but it seems it works...
-    if (!source || source == self) return;
+    if (!source || source == self) {
+        return;
+    }
     GBLogDebug(@"%@:Merging methods from %@...", _parent, source->_parent);
     
     // First merge all existing methods regardless of section and prepare the list of all new methods.
@@ -180,7 +186,9 @@
         }
         [existingMethod mergeDataFromObject:sourceMethod];
     }];
-    if ([newMethods count] == 0) return;
+    if ([newMethods count] == 0) {
+        return;
+    }
     
     // Second merge all sections; only use sections for methods that were not registered yet! Note that we need to remember current section so that we restore it later on.
     __block GBMethodSectionData *unnamedSection = nil;

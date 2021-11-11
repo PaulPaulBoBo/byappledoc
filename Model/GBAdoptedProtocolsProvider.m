@@ -35,12 +35,14 @@
 - (void)registerProtocol:(GBProtocolData *)protocol {
     NSParameterAssert(protocol != nil);
     GBLogDebug(@"%@:Registering protocol %@...", _parent, protocol);
-    if ([_protocols containsObject:protocol]) return;
+    if ([_protocols containsObject:protocol]) {
+        return;
+    }
     GBProtocolData *existingProtocol = _protocolsByName[protocol.nameOfProtocol];
     if (existingProtocol) {
         [existingProtocol mergeDataFromObject:protocol];
-        return;
-    }
+            return;
+        }
     if (_protocolsByName[protocol.nameOfProtocol])
         [NSException raise:@"Protocol with name %@ is already registered!", protocol.nameOfProtocol];
     [_protocols addObject:protocol];
@@ -48,7 +50,9 @@
 }
 
 - (void)mergeDataFromProtocolsProvider:(GBAdoptedProtocolsProvider *)source {
-    if (!source || source == self) return;
+    if (!source || source == self) {
+        return;
+    }
     GBLogDebug(@"%@:Merging adopted protocols from %@...", _parent, source->_parent);
     for (GBProtocolData *sourceProtocol in source.protocols) {
         GBProtocolData *existingProtocol = _protocolsByName[sourceProtocol.nameOfProtocol];

@@ -56,16 +56,22 @@
     if ([preserve count] == 0) {
         if (exists) {
             GBLogDebug(@"Removing existing directory...");
-            if (![self.fileManager removeItemAtPath:standardized error:error]) return NO;
+            if (![self.fileManager removeItemAtPath:standardized error:error]) {
+        return NO;
+    }
         }
     } else if (exists) {
         GBLogDebug(@"Enumerating directory contents...");
         NSArray *contents = [self.fileManager contentsOfDirectoryAtPath:standardized error:error];
-        if (!contents && error && *error) return NO;
+        if (!contents && error && *error) {
+        return NO;
+    }
         for (NSString *subpath in contents) {
             if (![preserve containsObject:subpath]) {
                 GBLogDebug(@"Removing '%@'...", subpath);
-                if (![self.fileManager removeItemAtPath:[path stringByAppendingPathComponent:subpath] error:error]) return NO;
+                if (![self.fileManager removeItemAtPath:[path stringByAppendingPathComponent:subpath] error:error]) {
+        return NO;
+    }
             }
         }
     }

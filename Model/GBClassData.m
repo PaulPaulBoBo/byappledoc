@@ -33,7 +33,9 @@
 #pragma mark Overriden methods
 
 - (void)mergeDataFromObject:(id)source {
-    if (!source || source == self) return;
+    if (!source || source == self) {
+        return;
+    }
     GBLogDebug(@"%@:Merging data from %@...", self, source);
     NSParameterAssert([[source nameOfClass] isEqualToString:self.nameOfClass]);
     [super mergeDataFromObject:source];

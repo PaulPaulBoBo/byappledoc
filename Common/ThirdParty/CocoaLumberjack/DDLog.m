@@ -211,7 +211,9 @@ typedef struct LoggerNode LoggerNode;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 + (void)addLogger:(id <DDLogger>)logger {
-    if (logger == nil) return;
+    if (logger == nil) {
+        return;
+    }
     
     if (IS_GCD_AVAILABLE) {
     #if GCD_MAYBE_AVAILABLE
@@ -237,7 +239,9 @@ typedef struct LoggerNode LoggerNode;
 }
 
 + (void)removeLogger:(id <DDLogger>)logger {
-    if (logger == nil) return;
+    if (logger == nil) {
+        return;
+    }
     
     if (IS_GCD_AVAILABLE) {
     #if GCD_MAYBE_AVAILABLE

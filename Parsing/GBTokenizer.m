@@ -124,13 +124,17 @@
         do {
             if (pos < self.tokens.count) {
                 token = self.tokens[pos];
-    
+                
                 NSArray *postfixLines = [[token stringValue] componentsMatchedByRegex:self.singleLineCommentAfterRegex capture:1];
                 if ([postfixLines count] > 0) {
                     NSString *value = [NSString string];
-                    for (NSString *match in postfixLines) value = [value stringByAppendingString:match];
-    
-                    if (postfixValue) {   postfixValue = [@"\n" stringByAppendingString:postfixValue];   postfixValue = [value stringByAppendingString:postfixValue];   isMultiline = YES;
+                    for (NSString *match in postfixLines) {
+                        value = [value stringByAppendingString:match];
+                    }
+                    if (postfixValue) {
+                        postfixValue = [@"\n" stringByAppendingString:postfixValue];
+                        postfixValue = [value stringByAppendingString:postfixValue];
+                        isMultiline = YES;
                     }
                     else postfixValue = value;
                 }
@@ -147,7 +151,9 @@
 }
 
 - (void)consume:(NSUInteger)count {
-    if (count == 0) return;
+    if (count == 0) {
+        return;
+    }
     while (count > 0 && ![self eof]) {
         self.tokenIndex++;
         [self consumeComments];
@@ -159,10 +165,12 @@
     [self consumeFrom:nil to:end usingBlock:block];
 }
 
-- (void)consumeFrom:(NSString *)start to:(NSString *)end usingBlock:(void (^)(PKToken *token, BOOL *consume, BOOL *stop))block {    
+- (void)consumeFrom:(NSString *)start to:(NSString *)end usingBlock:(void (^)(PKToken *token, BOOL *consume, BOOL *stop))block {
     // Skip starting token.
     if (start) {
-        if (![[self currentToken] matches:start]) return;
+        if (![[self currentToken] matches:start]) {
+            return;
+        }
         [self consume:1];
     }
     
@@ -176,7 +184,7 @@
             if (!start) break;
             if (--level == 0) break;
         }
-
+        
         // Report the token.
         BOOL consume = YES;
         if (block) block([self currentToken], &consume, &quit);
@@ -208,8 +216,10 @@
 
 - (BOOL)consumeComments {
     // This method checks if current token is a comment and consumes all comments until non-comment token is detected or EOF reached. The result of the method is that current index is positioned on the first non-comment token. If current token is not comment, the method doesn't do anything, but simply returns NO to indicate it didn't find a comment and therefore it didn't move current token. This is also where we do initial comments handling such as removing starting and ending chars etc.
-    if ([self eof]) return NO;
-
+    if ([self eof]) {
+        return NO;
+    }
+    
     //PKToken *startingPreviousToken = nil;
     //PKToken *startingLastToken = nil;
     NSUInteger previousSingleLineEndOffset = NSNotFound;
@@ -243,8 +253,8 @@
             previousSingleLineEndOffset = [token offset] + [[token stringValue] length];
             previousSingleLineIndentation = tokenIndentation;
         }
-
-        // Match multiple line comments and only process last (in reality we should only have one comment in each mutliline comment token, but let's handle any strange cases graceosly). 
+        
+        // Match multiple line comments and only process last (in reality we should only have one comment in each mutliline comment token, but let's handle any strange cases graceosly).
         else {
             NSArray *multiLiners = [[token stringValue] componentsMatchedByRegex:self.multiLineCommentRegex capture:1];
             value = [multiLiners lastObject];
@@ -256,15 +266,15 @@
             self.isLastCommentMultiline = YES;
             //startingLastToken = token;
             self.lastCommentToken = token;
-            }
-
+        }
+        
         // Append string value to current comment and proceed with next token.
         if (value)
             [self.lastCommentBuilder appendString:value];
-
+        
         self.tokenIndex++;
     }
-
+    
     // If last comment contains @name, we should assign it to previous one and reset current! This should ideally be handled by higher level component, but it's simplest to do it here. Note that we don't deal with source info here, we'll do immediately after this as long as we properly setup tokens.
     if (self.settings && [self.lastCommentBuilder isMatchedByRegex:self.settings.commentComponents.methodGroupRegex]) {
         self.previousCommentBuilder = [self.lastCommentBuilder mutableCopy];
@@ -274,7 +284,7 @@
         self.previousCommentToken = self.lastCommentToken;
         self.lastCommentToken = nil;
     }
-
+    
     return YES;
 }
 
@@ -293,7 +303,7 @@
         }
         [strippedLines addObject:line];
     }];
-
+    
     // If all lines start with a *, ignore the prefix. Note that we ignore first line as it can only contain /** and text! We also ignore last line as if it only contains */
     NSString *prefixRegex = @"(?m:^\\s*\\*[ ]*)";
     __block BOOL stripPrefix = ([strippedLines count] > 1);
@@ -324,8 +334,8 @@
         line = [self lineByPreprocessingHeaderDocDirectives:line];
         [result appendString:line];
         if (idx < [strippedLines count] - 1) [result appendString:@"\n"];
-    }];    
-        
+    }];
+    
     // If the result is empty string, return nil, otherwise return the comment string.
     if ([result length] == 0) return nil;
     return result;
@@ -341,30 +351,30 @@
     //line = [line stringByReplacingOccurrencesOfRegex:@"(?m:^\\s*@(discussion|abstract))\\s?" withString:@"\n"];
     
     // Replace methodgroup with name.
-    line = [line stringByReplacingOccurrencesOfRegex:@"(?:@(methodgroup|group))" withString:@"@name"];  
+    line = [line stringByReplacingOccurrencesOfRegex:@"(?:@(methodgroup|group))" withString:@"@name"];
     
     // Remove unsupported Doxygen words. This should ease the pain of migrating large amount of comments using doxygen markup.
     // Comments like the following are cleaned up, and made ready for the markup appledoc expects
-
+    
     /**
      @brief Brief Comment
      @details Detailed Comment.
      */
     
     // Becomes....
-
+    
     /**
      Brief Comment
      
      Detailed Comment.
      */
-
+    
     
     line = [line stringByReplacingOccurrencesOfRegex:@"(?m:^\\s*@updated).*$?" withString:@"\n"];
     
     // Removes any occurance of @brief and it's surrounding whitespace
     //line = [line stringByReplacingOccurrencesOfRegex:@"\\s*@brief\\s*" withString:@""];
-
+    
     // Replaces any occurance of @details and it's surrounding whitespace with a newline
     //line = [line stringByReplacingOccurrencesOfRegex:@"^\\s*@details\\s*" withString:@"\n"];
     
@@ -374,13 +384,13 @@
 - (NSArray *)linesByReorderingHeaderDocDirectives:(NSArray *)lines {
 #if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1070
     if (!self.settings.preprocessHeaderDoc) return lines;
-
+    
     // Make sure that @param and @return is placed at the end (after abstract etc.)
     NSMutableArray *reorderedParams = [NSMutableArray array];
-    NSMutableArray *reorderedNonParams = [NSMutableArray array];    
+    NSMutableArray *reorderedNonParams = [NSMutableArray array];
     NSRegularExpression *directiveExpression = [NSRegularExpression regularExpressionWithPattern:@"^\\s*@(param|result|return)" options:NSRegularExpressionDotMatchesLineSeparators error:nil];
     NSRegularExpression *lineExpression = [NSRegularExpression regularExpressionWithPattern:@"^\\s*@[a-z]" options:NSRegularExpressionDotMatchesLineSeparators error:nil];
-
+    
     BOOL isParamBlock = NO;
     for (NSString *line in lines) {
         if ([directiveExpression numberOfMatchesInString:line options:0 range:NSMakeRange(0, [line length])] > 0) {
@@ -395,8 +405,8 @@
             [reorderedNonParams addObject:line];
         }
     }
-
-    [reorderedNonParams addObjectsFromArray:reorderedParams];    
+    
+    [reorderedNonParams addObjectsFromArray:reorderedParams];
     return reorderedNonParams;
 #else
     return lines;
@@ -456,7 +466,7 @@
     // otherwise returns -1.
     NSUInteger lineOffset = [self offsetOfLineContainingOffset:offset];
     NSRange lineToOffsetRange = NSMakeRange(lineOffset, offset - lineOffset);
-
+    
     // Short-circuit logic if offset is at the start of the line
     if (lineToOffsetRange.length == 0) {
         return 0;
@@ -490,3 +500,4 @@
 @synthesize settings;
 
 @end
+

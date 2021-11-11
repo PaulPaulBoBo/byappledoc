@@ -34,7 +34,9 @@
 }
 
 - (BOOL) isInsideCrossRef:(GBCrossRefData *) outer {
-    if (outer == nil) return NO;
+    if (outer == nil) {
+        return NO;
+    }
     return NSEqualRanges(outer.range, NSUnionRange(self.range, outer.range));
 }
 
@@ -52,13 +54,13 @@
     } else if ([object isKindOfClass:[GBDocumentData class]]) {
         return NO;
     } else {
-//        BOOL re = NO;
-//        @try {
-//            re = [[object methodSelector] isEqualToString:self.description];
-//        }
-//        @finally {
-//            re = [[object description] isEqualToString:self.description];
-//        }
+        //        BOOL re = NO;
+        //        @try {
+        //            re = [[object methodSelector] isEqualToString:self.description];
+        //        }
+        //        @finally {
+        //            re = [[object description] isEqualToString:self.description];
+        //        }
         return NO;
     }
 }
@@ -168,13 +170,17 @@ typedef NSUInteger GBProcessingFlag;
 - (void)processComment:(GBComment *)comment withContext:(id)context store:(id)aStore {
     NSParameterAssert(comment != nil);
     NSParameterAssert(aStore != nil);
-    if (comment.originalContext != nil && comment.originalContext != context) return;
-    if (comment.isProcessed) return;
+    if (comment.originalContext != nil && comment.originalContext != context) {
+        return;
+    }
+    if (comment.isProcessed) {
+        return;
+    }
     GBLogDebug(@"Processing %@ found in %@...", comment, comment.sourceInfo.filename);
     self.reservedShortDescriptionData = nil;
     self.currentComment = comment;
     self.currentContext = context;
-    self.store = aStore;    
+    self.store = aStore;
     NSArray *lines = [comment.stringValue arrayOfLines];
     NSUInteger line = comment.sourceInfo.lineNumber;
     NSRange blockRange = NSMakeRange(0, 0);
@@ -231,22 +237,44 @@ typedef NSUInteger GBProcessingFlag;
     NSArray *block = [lines subarrayWithRange:blockRange];
     if ([self isLineMatchingDirectiveStatement:[block firstObject]]) {
         NSString *string = [self stringByCombiningTrimmedLines:block];
-        if ([self processDiscussionBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) return;
-        if ([self processAbstractBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) return;
-        if ([self processNoteBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) return;
-        if ([self processWarningBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) return;
-        if ([self processBugBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) return;
-        if ([self processDeprecatedBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) return;
-        if ([self processParamBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) return;
-        if ([self processExceptionBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) return;
-        if ([self processReturnBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) return;
-        if ([self processAvailabilityBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) return;
-        if ([self processRelatedBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) return;
+        if ([self processDiscussionBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) {
+            return;
+        }
+        if ([self processAbstractBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) {
+            return;
+        }
+        if ([self processNoteBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) {
+            return;
+        }
+        if ([self processWarningBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) {
+            return;
+        }
+        if ([self processBugBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) {
+            return;
+        }
+        if ([self processDeprecatedBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) {
+            return;
+        }
+        if ([self processParamBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) {
+            return;
+        }
+        if ([self processExceptionBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) {
+            return;
+        }
+        if ([self processReturnBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) {
+            return;
+        }
+        if ([self processAvailabilityBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) {
+            return;
+        }
+        if ([self processRelatedBlockInString:string lines:lines blockRange:blockRange shortRange:shortRange]) {
+            return;
+        }
         
         
         GBLogXWarn(self.currentSourceInfo, @"Unknown directive block %@ encountered at %@, processing as standard text!", [[lines firstObject] normalizedDescription], self.currentSourceInfo);
     }
-        
+    
     // Handle short description and update block range if we're not repeating first paragraph.
     if (!self.currentComment.shortDescription) {
         [self registerShortDescriptionFromLines:lines range:shortRange removePrefix:nil];
@@ -257,10 +285,14 @@ typedef NSUInteger GBProcessingFlag;
     }
     
     // Register main block. Note that we skip this if block is empty (this can happen when removing short description above).
-    if (blockRange.length == 0) return;
+    if (blockRange.length == 0) {
+        return;
+    }
     NSArray *blockLines = blockRange.length == [block count] ? block :[lines subarrayWithRange:blockRange];
     NSString *blockString = [self stringByCombiningTrimmedLines:blockLines];
-    if ([blockString length] == 0) return;
+    if ([blockString length] == 0) {
+        return;
+    }
     
     // Process the string and register long description component.
     // **IMPORTANT CONTRIBUTORS NOTE:** do NOT comment or change following two lines. Doing so will brake overview section being created for classes, categories and protocols! Most often this happens with folks wanting to bring in better HeaderDoc support, but it brakes "standard" appledoc way of dealing comments. While I symphatize with ideas of supporting as wide audience as possible, native appledoc users are still larger audience than HeaderDoc, so please find another way. My suggestion would be via cmd line switch that would change behavior from appledoc to HeaderDoc, then opt out with an if statement.
@@ -270,7 +302,9 @@ typedef NSUInteger GBProcessingFlag;
 
 - (void)registerShortDescriptionFromLines:(NSArray *)lines range:(NSRange)range removePrefix:(NSString *)remove {
     // Extracts short description text from the given range within the given array of lines, converts it to string, optionally removes given prefix (this is used to remove directive text) and registers resulting text as current comment's short description. If short description is already registered, nothing happens!
-    if (self.currentComment.shortDescription) return;
+    if (self.currentComment.shortDescription) {
+        return;
+    }
     
     // Get short description from the lines.
     NSArray *block = [lines subarrayWithRange:range];
@@ -287,7 +321,9 @@ typedef NSUInteger GBProcessingFlag;
 
 - (void)reserveShortDescriptionFromLines:(NSArray *)lines range:(NSRange)range removePrefix:(NSString *)remove {
     // Reserves the given short description data for later registration. This is used so that we can properly handle method directives - we only create short description from these if there is no other directive in the comment. So we want to postpone registration until the whole comment text is processed; if another description block is found later on, we'll be registering short description directly from it, so any registered data will not be used. But if after processing the whole block there is still no short description, we'll use registered data. This only registers the data the first time, so the first directive text found in comment is used for short description.
-    if (self.reservedShortDescriptionData) return;
+    if (self.reservedShortDescriptionData) {
+        return;
+    }
     self.reservedShortDescriptionData = [NSMutableDictionary dictionaryWithCapacity:3];
     self.reservedShortDescriptionData[@"lines"] = lines;
     self.reservedShortDescriptionData[@"range"] = [NSValue valueWithRange:range];
@@ -296,8 +332,12 @@ typedef NSUInteger GBProcessingFlag;
 
 - (void)registerReservedShortDescriptionIfNecessary {
     // If current comment doens't have short description assigned, this method registers it from registered data.
-    if (self.currentComment.shortDescription) return;
-    if (!self.reservedShortDescriptionData) return;
+    if (self.currentComment.shortDescription) {
+        return;
+    }
+    if (!self.reservedShortDescriptionData) {
+        return;
+    }
     GBLogDebug(@"- Registering reserved short description...");
     NSArray *lines = self.reservedShortDescriptionData[@"lines"];
     NSRange range = [self.reservedShortDescriptionData[@"range"] rangeValue];
@@ -309,7 +349,9 @@ typedef NSUInteger GBProcessingFlag;
 
 - (BOOL)processNoteBlockInString:(NSString *)string lines:(NSArray *)lines blockRange:(NSRange)blockRange shortRange:(NSRange)shortRange {
     NSArray *components = [string captureComponentsMatchedByRegex:self.components.noteSectionRegex];
-    if ([components count] == 0) return NO;
+    if ([components count] == 0) {
+        return NO;
+    }
     
     // Get data from captures. Index 1 is directive, index 2 description text.
     NSString *directive = components[1];
@@ -327,7 +369,9 @@ typedef NSUInteger GBProcessingFlag;
 
 - (BOOL)processWarningBlockInString:(NSString *)string lines:(NSArray *)lines blockRange:(NSRange)blockRange shortRange:(NSRange)shortRange {
     NSArray *components = [string captureComponentsMatchedByRegex:self.components.warningSectionRegex];
-    if ([components count] == 0) return NO;
+    if ([components count] == 0) {
+        return NO;
+    }
     
     // Get data from captures. Index 1 is directive, index 2 description text.
     NSString *directive = components[1];
@@ -345,7 +389,9 @@ typedef NSUInteger GBProcessingFlag;
 
 - (BOOL)processDeprecatedBlockInString:(NSString *)string lines:(NSArray *)lines blockRange:(NSRange)blockRange shortRange:(NSRange)shortRange {
     NSArray *components = [string captureComponentsMatchedByRegex:self.components.deprecatedSectionRegex];
-    if ([components count] == 0) return NO;
+    if ([components count] == 0) {
+        return NO;
+    }
     
     // Get data from captures. Index 1 is directive, index 2 description text.
     NSString *directive = components[1];
@@ -363,7 +409,9 @@ typedef NSUInteger GBProcessingFlag;
 
 - (BOOL)processBugBlockInString:(NSString *)string lines:(NSArray *)lines blockRange:(NSRange)blockRange shortRange:(NSRange)shortRange {
     NSArray *components = [string captureComponentsMatchedByRegex:self.components.bugSectionRegex];
-    if ([components count] == 0) return NO;
+    if ([components count] == 0) {
+        return NO;
+    }
     
     // Get data from captures. Index 1 is directive, index 2 description text.
     NSString *directive = components[1];
@@ -381,7 +429,9 @@ typedef NSUInteger GBProcessingFlag;
 
 - (BOOL)processParamBlockInString:(NSString *)string lines:(NSArray *)lines blockRange:(NSRange)blockRange shortRange:(NSRange)shortRange {
     NSArray *components = [string captureComponentsMatchedByRegex:self.components.parameterDescriptionRegex];
-    if ([components count] == 0) return NO;
+    if ([components count] == 0) {
+        return NO;
+    }
     
     // Get data from captures. Index 1 is directive, index 2 name, index 3 description text.
     NSString *name = components[2];
@@ -407,7 +457,9 @@ typedef NSUInteger GBProcessingFlag;
 
 - (BOOL)processExceptionBlockInString:(NSString *)string lines:(NSArray *)lines blockRange:(NSRange)blockRange shortRange:(NSRange)shortRange {
     NSArray *components = [string captureComponentsMatchedByRegex:self.components.exceptionDescriptionRegex];
-    if ([components count] == 0) return NO;
+    if ([components count] == 0) {
+        return NO;
+    }
     
     // Get data from captures. Index 1 is directive, index 2 name, index 3 description text.
     NSString *name = components[2];
@@ -419,7 +471,7 @@ typedef NSUInteger GBProcessingFlag;
     } else {
         prefix = @"";
     }
-
+    
     GBLogDebug(@"- Registering exception %@ description %@ at %@...", name, [description normalizedDescription], self.currentSourceInfo);
     [self reserveShortDescriptionFromLines:lines range:shortRange removePrefix:prefix];
     
@@ -433,7 +485,9 @@ typedef NSUInteger GBProcessingFlag;
 
 - (BOOL)processAvailabilityBlockInString:(NSString *)string lines:(NSArray *)lines blockRange:(NSRange)blockRange shortRange:(NSRange)shortRange {
     NSArray *components = [string captureComponentsMatchedByRegex:self.components.availabilityRegex];
-    if ([components count] == 0) return NO;
+    if ([components count] == 0) {
+        return NO;
+    }
     
     // Get data from captures. Index 1 is directive, index 2 description text.
     NSString *description = [components count] >= 3 ? components[2] :@"";
@@ -444,7 +498,7 @@ typedef NSUInteger GBProcessingFlag;
     } else {
         prefix = @"";
     }
-
+    
     GBLogDebug(@"- Registering availability description %@ at %@...", [description normalizedDescription], self.currentSourceInfo);
     [self reserveShortDescriptionFromLines:lines range:shortRange removePrefix:prefix];
     
@@ -456,7 +510,9 @@ typedef NSUInteger GBProcessingFlag;
 
 - (BOOL)processDiscussionBlockInString:(NSString *)string lines:(NSArray *)lines blockRange:(NSRange)blockRange shortRange:(NSRange)shortRange {
     NSArray *components = [string captureComponentsMatchedByRegex:self.components.discussionRegex];
-    if ([components count] == 0) return NO;
+    if ([components count] == 0) {
+        return NO;
+    }
     
     // Get data from captures. Index 1 is directive, index 2 description text.
     NSString *description = components[3];
@@ -479,7 +535,9 @@ typedef NSUInteger GBProcessingFlag;
 
 - (BOOL)processAbstractBlockInString:(NSString *)string lines:(NSArray *)lines blockRange:(NSRange)blockRange shortRange:(NSRange)shortRange {
     NSArray *components = [string captureComponentsMatchedByRegex:self.components.abstractRegex];
-    if ([components count] == 0) return NO;
+    if ([components count] == 0) {
+        return NO;
+    }
     
     // Get data from captures. Index 1 is directive, index 2 description text.
     NSString *description = components[3];
@@ -520,7 +578,9 @@ typedef NSUInteger GBProcessingFlag;
 
 - (BOOL)processReturnBlockInString:(NSString *)string lines:(NSArray *)lines blockRange:(NSRange)blockRange shortRange:(NSRange)shortRange {
     NSArray *components = [string captureComponentsMatchedByRegex:self.components.returnDescriptionRegex];
-    if ([components count] == 0) return NO;
+    if ([components count] == 0) {
+        return NO;
+    }
     
     // Get data from captures. Index 1 is directive, index 2 description text.
     NSString *description = components[2];
@@ -531,7 +591,7 @@ typedef NSUInteger GBProcessingFlag;
     } else {
         prefix = @"";
     }
-
+    
     GBLogDebug(@"- Registering return description %@ at %@...", [description normalizedDescription], self.currentSourceInfo);
     [self reserveShortDescriptionFromLines:lines range:shortRange removePrefix:prefix];
     
@@ -543,7 +603,9 @@ typedef NSUInteger GBProcessingFlag;
 
 - (BOOL)processRelatedBlockInString:(NSString *)string lines:(NSArray *)lines blockRange:(NSRange)blockRange shortRange:(NSRange)shortRange {
     NSArray *components = [string captureComponentsMatchedByRegex:self.components.relatedSymbolRegex];
-    if ([components count] == 0) return NO;
+    if ([components count] == 0) {
+        return NO;
+    }
     
     // Get data from captures. Index 1 is directive, index 2 reference.
     NSString *reference = components[2];
@@ -554,7 +616,7 @@ typedef NSUInteger GBProcessingFlag;
     } else {
         prefix = @"";
     }
-
+    
     GBLogDebug(@"- Registering related symbol %@ at %@...", reference, self.currentSourceInfo);
     [self reserveShortDescriptionFromLines:lines range:shortRange removePrefix:prefix];
     
@@ -574,17 +636,39 @@ typedef NSUInteger GBProcessingFlag;
 }
 
 - (BOOL)isLineMatchingDirectiveStatement:(NSString *)string {
-    if ([string isMatchedByRegex:self.components.discussionRegex]) return YES;
-    if ([string isMatchedByRegex:self.components.abstractRegex]) return YES;
-    if ([string isMatchedByRegex:self.components.noteSectionRegex]) return YES;
-    if ([string isMatchedByRegex:self.components.warningSectionRegex]) return YES;
-    if ([string isMatchedByRegex:self.components.bugSectionRegex]) return YES;
-    if ([string isMatchedByRegex:self.components.deprecatedSectionRegex]) return YES;
-    if ([string isMatchedByRegex:self.components.parameterDescriptionRegex]) return YES;
-    if ([string isMatchedByRegex:self.components.exceptionDescriptionRegex]) return YES;
-    if ([string isMatchedByRegex:self.components.returnDescriptionRegex]) return YES;
-    if ([string isMatchedByRegex:self.components.availabilityRegex]) return YES;
-    if ([string isMatchedByRegex:self.components.relatedSymbolRegex]) return YES;
+    if ([string isMatchedByRegex:self.components.discussionRegex]) {
+        return YES;
+    }
+    if ([string isMatchedByRegex:self.components.abstractRegex]) {
+        return YES;
+    }
+    if ([string isMatchedByRegex:self.components.noteSectionRegex]) {
+        return YES;
+    }
+    if ([string isMatchedByRegex:self.components.warningSectionRegex]) {
+        return YES;
+    }
+    if ([string isMatchedByRegex:self.components.bugSectionRegex]) {
+        return YES;
+    }
+    if ([string isMatchedByRegex:self.components.deprecatedSectionRegex]) {
+        return YES;
+    }
+    if ([string isMatchedByRegex:self.components.parameterDescriptionRegex]) {
+        return YES;
+    }
+    if ([string isMatchedByRegex:self.components.exceptionDescriptionRegex]) {
+        return YES;
+    }
+    if ([string isMatchedByRegex:self.components.returnDescriptionRegex]) {
+        return YES;
+    }
+    if ([string isMatchedByRegex:self.components.availabilityRegex]) {
+        return YES;
+    }
+    if ([string isMatchedByRegex:self.components.relatedSymbolRegex]) {
+        return YES;
+    }
     return NO;
 }
 
@@ -608,11 +692,11 @@ typedef NSUInteger GBProcessingFlag;
 - (NSString *)stringByPreprocessingString:(NSString *)string withFlags:(GBProcessingFlag)flags {
     // Converts all appledoc formatting and cross refs to proper Markdown text suitable for passing to Markdown generator.
     if ([string length] == 0) return string;
-
+    
     NSMutableString *result = [NSMutableString stringWithCapacity:[string length]];
-
+    
     // Process all links and code blocks separately, so that they won't be cut off if the contain _'s (which is a formatting marker)
-
+    
     NSRange searchRange = NSMakeRange(0, [string length]);
     NSArray *components = [self codeAndLinkComponentsInString:string];
     for (NSDictionary *component in components) {
@@ -639,18 +723,18 @@ typedef NSUInteger GBProcessingFlag;
             output = [output stringByReplacingCharactersInRange:range withString:backticks];
             [result appendString:output];
         }
-
+        
         NSUInteger location = componentRange.location + [body length];
         searchRange = NSMakeRange(location, [string length] - location);
     }
-
+    
     // If there is some remaining text, preprocess it as well.
     if ([string length] > searchRange.location) {
         NSString *remainingText = [string substringWithRange:searchRange];
         NSString *preprocessedText = [self stringByPreprocessingNonLinkString:remainingText withFlags:flags];
         [result appendString:preprocessedText];
     }
-
+    
     // Finally replace all embedded code span Markdown links to proper ones. Embedded links look like:`[`desc`](address)`.
     NSString *regex = [NSString stringWithFormat:@"`((?:%@)?\\[`[^`]*`\\]\\(.+?\\)(?:%@)?)`", self.components.codeSpanStartMarker, self.components.codeSpanEndMarker];
     NSString *clean = [result stringByReplacingOccurrencesOfRegex:regex usingBlock:^NSString *(NSInteger captureCount, NSString *const __unsafe_unretained *capturedStrings, const NSRange *capturedRanges, volatile BOOL *const stop) {
@@ -662,7 +746,7 @@ typedef NSUInteger GBProcessingFlag;
 - (NSString *)stringByPreprocessingNonLinkString:(NSString *)string withFlags:(GBProcessingFlag)flags {
     // Converts all appledoc formatting and cross refs to proper Markdown text suitable for passing to Markdown generator.
     if ([string length] == 0) return string;
-
+    
     // Formatting markers are fine, except *, which should be converted to **. To simplify cross refs detection, we handle all possible formatting markers though so we can search for cross refs within "clean" formatted text, without worrying about markers interfering with search. Note that we also handle "standard" Markdown nested formats and bold markers here, so that we properly handle cross references within.
     NSString *pattern = @"(?s:(\\*__|__\\*|\\*\\*_|_\\*\\*|\\*\\*\\*|___|\\*_|_\\*|\\*\\*|__|\\*|_|==!!==|```|`)(.+?)\\1)";
     NSArray *components = [string arrayOfDictionariesByMatchingRegex:pattern withKeysAndCaptures:@"marker", 1, @"value", 2, nil];
@@ -859,7 +943,7 @@ typedef NSUInteger GBProcessingFlag;
                     index = i;
                 }
             }
-                        
+            
             // If there is some text skipped after previous link (or search range), append it to output first.
             if (linkData && linkData.range.location > lastUsedLocation) {
                 NSRange skippedRange = NSMakeRange(lastUsedLocation, linkData.range.location - lastUsedLocation);
@@ -885,7 +969,7 @@ typedef NSUInteger GBProcessingFlag;
         // Exit if there's nothing more to process.
         if (searchRange.location >= searchEndLocation) break;
     }
-
+    
     // If there's some text remaining after all links, append it.
     if (!isInsideMarkdown && lastUsedLocation < searchEndLocation) {
         NSRange remainingRange = NSMakeRange(lastUsedLocation, searchEndLocation - lastUsedLocation);
@@ -970,7 +1054,7 @@ typedef NSUInteger GBProcessingFlag;
     NSString *regex = [self.components categoryCrossReferenceRegex:templated];
     NSArray *components = [string captureComponentsMatchedByRegex:regex range:searchRange];
     if ([components count] == 0) return nil;
-
+    
     // Get link components. Index 0 contains full text, including optional template prefix/suffix, index 1 just the object name.
     NSString *linkText = [components[0] stringByTrimmingWhitespaceAndNewLine];
     NSString *objectName = [components[1] stringByTrimmingWhitespaceAndNewLine];
@@ -979,7 +1063,7 @@ typedef NSUInteger GBProcessingFlag;
     id referencedObject = [self.store categoryWithName:objectName];
     if (!referencedObject) return nil;
     self.lastReferencedObject = referencedObject;
-
+    
     // Create link data and return.
     GBCrossRefData *result = [GBCrossRefData crossRefData];
     result.range = [string rangeOfString:linkText options:0 range:searchRange];
@@ -1040,12 +1124,12 @@ typedef NSUInteger GBProcessingFlag;
 - (GBCrossRefData *)dataForLocalMemberLinkInString:(NSString *)string searchRange:(NSRange)searchRange flags:(GBProcessingFlag)flags {
     // Matches the first local member cross reference in the given search range of the given string. if found, link data otherwise empty data is returned.
     if (!self.currentContext) return nil;
-
+    
     BOOL templated = (flags & GBProcessingFlagRelatedItem) == 0;
     NSString *regex = [self.components localMemberCrossReferenceRegex:templated];
     NSArray *components = [string captureComponentsMatchedByRegex:regex range:searchRange];
     if ([components count] == 0) return nil;
-        
+    
     // Get link components. Index 0 contains full text, including optional template prefix/suffix, index 1 optional prefix, index 2 selector.
     NSString *linkText = components[0];
     NSString *selector = components[2];
@@ -1059,7 +1143,7 @@ typedef NSUInteger GBProcessingFlag;
     if (!referencedObject) return nil;
     self.lastReferencedObject = referencedObject;
     
-    // If we're creating link for related item, we should use method prefix.    
+    // If we're creating link for related item, we should use method prefix.
     if ((flags & GBProcessingFlagRelatedItem) > 0 && self.settings.prefixLocalMembersInRelatedItemsList) selector = referencedObject.prefixedMethodSelector;
     
     // If this is copied comment, we need to prepare "universal" relative path even if used in local object. As the comment was copied to other objects, we don't know where it will point to, so we need to make it equally usable in the secondary object(s). Note that this code assumes copied comments can only be used for top-level objects so we simplify stuff a bit.
@@ -1070,7 +1154,7 @@ typedef NSUInteger GBProcessingFlag;
         NSString *prefix = [descendPath stringByAppendingPathComponent:path];
         address = [prefix stringByAppendingString:address];
     }
-
+    
     // Create link data and return.
     GBCrossRefData *result = [GBCrossRefData crossRefData];
     result.range = [string rangeOfString:linkText options:0 range:searchRange];
@@ -1092,14 +1176,14 @@ typedef NSUInteger GBProcessingFlag;
     NSString *linkDisplayText = components[1];
     NSString *objectName = components[2];
     NSString *selector = components[3];
-    if( [components count] > 5) {
-        if( [linkDisplayText length] < 2) {
+    if([components count] > 5) {
+        if([linkDisplayText length] < 2) {
             linkDisplayText = components[4];
         }
-        if( [objectName length] == 0) {
+        if([objectName length] == 0) {
             objectName = components[5];
         }
-        if( [selector length] == 0) {
+        if([selector length] == 0) {
             selector = components[6];
         }
     }
@@ -1134,7 +1218,7 @@ typedef NSUInteger GBProcessingFlag;
     // Create link data and return.
     result.range = [string rangeOfString:linkText options:0 range:searchRange];
     result.address = [self.settings htmlReferenceForObject:referencedMember fromSource:self.currentContext];
-    if( [linkDisplayText length] > 1) {
+    if([linkDisplayText length] > 1) {
         result.description = linkDisplayText;
     } else {
         result.description = [NSString stringWithFormat:@"[%@ %@]", objectName, selector];
@@ -1204,7 +1288,7 @@ static NSString *escapePercentCharacters(NSString *string) {
     NSString *address = components[2];
     NSString *title = components[3];
     if ([title length] > 0) title = escapePercentCharacters([NSString stringWithFormat:@" \"%@\"", title]);
-
+    
     NSString *prefix = [linkText characterAtIndex:0] == '!' ? @"!" :nil;
     
     // Create link item, prepare range and return.
@@ -1227,7 +1311,7 @@ static NSString *escapePercentCharacters(NSString *string) {
     NSString *address = components[2];
     NSString *title = components[3];
     if ([title length] > 0) title = [NSString stringWithFormat:@" \"%@\"", title];
-
+    
     // Create link item, prepare range and return.
     GBCrossRefData *result = [GBCrossRefData crossRefData];
     result.range = [string rangeOfString:linkText options:0 range:searchRange];
@@ -1254,3 +1338,4 @@ static NSString *escapePercentCharacters(NSString *string) {
 @synthesize store;
 
 @end
+

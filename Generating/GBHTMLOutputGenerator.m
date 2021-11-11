@@ -43,17 +43,39 @@
 #pragma Generation handling
 
 - (BOOL)generateOutputWithStore:(id)store error:(NSError **)error {
-    if (![super generateOutputWithStore:store error:error]) return NO;
-    if (![self validateTemplates:error]) return NO;
-    if (![self processClasses:error]) return NO;
-    if (![self processCategories:error]) return NO;
-    if (![self processProtocols:error]) return NO;
-    if (![self processDocuments:error]) return NO;
-    if (![self processConstants:error]) return NO;
-    if (![self processBlocks:error]) return NO;
-    if (![self processIndex:error]) return NO;
-    if (![self processUnDocIndex:error]) return NO;
-    if (![self processHierarchy:error]) return NO;
+    if (![super generateOutputWithStore:store error:error]) {
+        return NO;
+    }
+    if (![self validateTemplates:error]) {
+        return NO;
+    }
+    if (![self processClasses:error]) {
+        return NO;
+    }
+    if (![self processCategories:error]) {
+        return NO;
+    }
+    if (![self processProtocols:error]) {
+        return NO;
+    }
+    if (![self processDocuments:error]) {
+        return NO;
+    }
+    if (![self processConstants:error]) {
+        return NO;
+    }
+    if (![self processBlocks:error]) {
+        return NO;
+    }
+    if (![self processIndex:error]) {
+        return NO;
+    }
+    if (![self processUnDocIndex:error]) {
+        return NO;
+    }
+    if (![self processHierarchy:error]) {
+        return NO;
+    }
     return YES;
 }
 
@@ -152,7 +174,9 @@
         NSString *installPath = [docsUserPath stringByAppendingPathComponent:lastComponent];
         handler.templateUserPath = path;
         handler.outputUserPath = installPath;
-        if (![handler copyTemplateFilesToOutputPath:error]) return NO;
+        if (![handler copyTemplateFilesToOutputPath:error]) {
+        return NO;
+    }
     }
     
     // Now process all documents.

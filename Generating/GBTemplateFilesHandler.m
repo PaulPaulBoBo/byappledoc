@@ -85,7 +85,9 @@
             delete = YES;
         } else if ([self isPathRepresentingTemplateFile:path]) {
             GBTemplateHandler *handler = [self templateHandlerFromTemplateFile:path error:error];
-            if (!handler) return NO;
+            if (!handler) {
+        return NO;
+    }
             GBLogDebug(@"Removing template file '%@' from output...", path);
             self.templateFiles[path] = handler;
             delete = YES;

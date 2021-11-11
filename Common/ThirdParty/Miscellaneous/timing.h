@@ -28,8 +28,8 @@
 //
 //             In consideration of your agreement to abide by the following terms, and
 //             subject to these terms, Apple grants you a personal, non - exclusive
-//             license, under Apple's copyrights in this original Apple software ( the
-//             "Apple Software" ), to use, reproduce, modify and redistribute the Apple
+//             license, under Apple's copyrights in this original Apple software (the
+//             "Apple Software"), to use, reproduce, modify and redistribute the Apple
 //             Software, with or without modifications, in source and / or binary forms;
 //             provided that if you redistribute the Apple Software in its entirety and
 //             without modifications, you must retain this notice and the following text
@@ -49,14 +49,14 @@
 //             ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
 //
 //             IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR
-//             CONSEQUENTIAL DAMAGES ( INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+//             CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
 //             SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-//             INTERRUPTION ) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION
+//             INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION
 //             AND / OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER
-//             UNDER THEORY OF CONTRACT, TORT ( INCLUDING NEGLIGENCE ), STRICT LIABILITY OR
+//             UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR
 //             OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-// Copyright ( C ) 2008 Apple Inc. All Rights Reserved.
+// Copyright (C) 2008 Apple Inc. All Rights Reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -74,13 +74,13 @@ GetCurrentTime() {
 }
     
 static inline NSTimeInterval 
-SubtractTime( GBAbsoluteTime uiEndTime, GBAbsoluteTime uiStartTime) {    
+SubtractTime(GBAbsoluteTime uiEndTime, GBAbsoluteTime uiStartTime) {    
     static NSTimeInterval convertion = 0.0;
     GBAbsoluteTime uiDifference = uiEndTime - uiStartTime;
-    if( 0 == convertion) {
+    if(0 == convertion) {
         mach_timebase_info_data_t kTimebase;
-        kern_return_t kError = mach_timebase_info( &kTimebase );
-        if( kError == 0  )
+        kern_return_t kError = mach_timebase_info(&kTimebase);
+        if(kError == 0 )
             convertion = 1e-9 * (NSTimeInterval) kTimebase.numer / (NSTimeInterval) kTimebase.denom;
     }        
     return convertion * (NSTimeInterval) uiDifference;

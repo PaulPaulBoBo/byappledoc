@@ -30,19 +30,23 @@
 - (void)registerIvar:(GBIvarData *)ivar {
     NSParameterAssert(ivar != nil);
     GBLogDebug(@"%@:Registering ivar %@...", _parent, ivar);
-    if ([_ivars containsObject:ivar]) return;
+    if ([_ivars containsObject:ivar]) {
+        return;
+    }
     GBIvarData *existingIvar = _ivarsByName[ivar.nameOfIvar];
     if (existingIvar) {
         [existingIvar mergeDataFromObject:ivar];
-        return;
-    }
+            return;
+        }
     ivar.parentObject = _parent;
     [_ivars addObject:ivar];
     _ivarsByName[ivar.nameOfIvar] = ivar;
 }
 
 - (void)mergeDataFromIvarsProvider:(GBIvarsProvider *)source {
-    if (!source || source == self) return;
+    if (!source || source == self) {
+        return;
+    }
     GBLogDebug(@"%@:Merging ivars from %@...", _parent, source->_parent);
     for (GBIvarData *sourceIvar in source.ivars) {
         GBIvarData *existingIvar = _ivarsByName[sourceIvar.nameOfIvar];

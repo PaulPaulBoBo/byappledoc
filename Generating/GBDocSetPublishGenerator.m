@@ -22,7 +22,9 @@
     GBLogInfo(@"Preparing DocSet for publishing...");
     
     // Prepare for run.
-    if (![super generateOutputWithStore:store error:error]) return NO;
+    if (![super generateOutputWithStore:store error:error]) {
+        return NO;
+    }
     GBTask *task = [GBTask task];
     task.reportIndividualLines = YES;
     

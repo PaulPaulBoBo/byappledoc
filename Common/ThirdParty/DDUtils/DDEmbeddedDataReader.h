@@ -91,7 +91,7 @@
 //
 
 /**
- * returns the embbedded plist for the executable at 'path' from where apple embeds it by default (for Commandline apps that should be codesigned. @see https://developer.apple.com/library/mac/#documentation/security/Conceptual/CodeSigningGuide/Procedures/Procedures.html) )
+ * returns the embbedded plist for the executable at 'path' from where apple embeds it by default (for Commandline apps that should be codesigned. @see https://developer.apple.com/library/mac/#documentation/security/Conceptual/CodeSigningGuide/Procedures/Procedures.html))
  * Segment is '__TEXT'
  * Section is '__info_plist'
  * @param url an url that points to a mach executable
@@ -101,7 +101,7 @@
 + (id)defaultPlistOfExecutableAtURL:(NSURL*)url error:(NSError**)error;
 
 /**
- * returns the CURRENT's executables embbedded plist from where apple embeds it embeds it by default (for Commandline apps that should be codesigned. @see https://developer.apple.com/library/mac/#documentation/security/Conceptual/CodeSigningGuide/Procedures/Procedures.html) )
+ * returns the CURRENT's executables embbedded plist from where apple embeds it embeds it by default (for Commandline apps that should be codesigned. @see https://developer.apple.com/library/mac/#documentation/security/Conceptual/CodeSigningGuide/Procedures/Procedures.html))
  * Segment is '__TEXT'
  * Section is '__info_plist'
  * @param path the POSIX file path that points to a mach executable
@@ -111,7 +111,7 @@
 + (id)defaultPlistOfExecutableAtPath:(NSString*)path error:(NSError**)error;
 
 /**
- * returns the CURRENT's executables embbedded plist from where apple embeds it by default (for Commandline apps that should be codesigned. @see https://developer.apple.com/library/mac/#documentation/security/Conceptual/CodeSigningGuide/Procedures/Procedures.html) )
+ * returns the CURRENT's executables embbedded plist from where apple embeds it by default (for Commandline apps that should be codesigned. @see https://developer.apple.com/library/mac/#documentation/security/Conceptual/CodeSigningGuide/Procedures/Procedures.html))
  * Segment is '__TEXT'
  * Section is '__info_plist'
  * @param error if a parsing error occurs and nil is returned, this is the NSError that occured

@@ -90,7 +90,7 @@
  
  Here's a diagram of captures for better orientation:
  
-    [ description ]( address " title " )
+    [ description ](address " title ")
       ^^^^^^^^^^^    ^^^^^^^   ^^^^^
        |              |         |
        |              |         +-- capture3

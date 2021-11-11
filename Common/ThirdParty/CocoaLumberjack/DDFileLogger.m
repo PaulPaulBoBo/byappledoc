@@ -78,8 +78,8 @@
     
     if ([old isEqual:new]) {
         // No change in value - don't bother with any processing.
-        return;
-    }
+            return;
+        }
     
     if ([keyPath isEqualToString:@"maximumNumberOfLogFiles"]) {
         NSLogInfo(@"DDFileLogManagerDefault:Responding to configuration change:maximumNumberOfLogFiles");
@@ -1129,7 +1129,9 @@
     // This method is only used on the iPhone simulator, where normal extended attributes are broken.
     // See full explanation in the header file.
     
-    if ([attrName length] == 0) return;
+    if ([attrName length] == 0) {
+        return;
+    }
     
     // Example:
     // attrName = "archived"
@@ -1181,7 +1183,9 @@
     // This method is only used on the iPhone simulator, where normal extended attributes are broken.
     // See full explanation in the header file.
     
-    if ([attrName length] == 0) return;
+    if ([attrName length] == 0) {
+        return;
+    }
     
     // Example:
     // attrName = "archived"

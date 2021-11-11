@@ -20,7 +20,9 @@
     GBLogInfo(@"Finalizing DocSet...");
     
     // Prepare for run.
-    if (![super generateOutputWithStore:store error:error]) return NO;
+    if (![super generateOutputWithStore:store error:error]) {
+        return NO;
+    }
     
     // Prepare source and destination paths and file names.
     NSString *sourceUserPath = self.inputUserPath;

@@ -104,8 +104,8 @@ dd_getopt_long_only(int nargc, char * const *nargv, const char *options, const s
         [self addLongOption:longOption shortOption:shortOption key:key argumentOptions:DDGetoptNoArgument];
         NSString* noKey = [NSString stringWithFormat:@"no-%@",longOption];
         [self addLongOption:noKey shortOption:shortOption key:noKey argumentOptions:DDGetoptNoArgument];
-        return;
-    }
+            return;
+        }
     const char * utf8String = [longOption UTF8String];
     NSData * utf8Data = [NSData dataWithBytes:utf8String length:strlen(utf8String)];
     
@@ -151,7 +151,7 @@ dd_getopt_long_only(int nargc, char * const *nargv, const char *options, const s
 
 - (NSArray *)parseOptionsWithArguments:(NSArray *)arguments command:(NSString *)command {
     NSUInteger argc = [arguments count];
-    char ** argv = alloca(sizeof(char *) * ( argc + 1 ) );
+    char ** argv = alloca(sizeof(char *) * (argc + 1 ));
     NSUInteger i;
     for (i = 0; i < argc; i++) {
         NSString *argument = arguments[i];
@@ -209,7 +209,7 @@ dd_getopt_long_only(int nargc, char * const *nargv, const char *options, const s
         }
     }
     
-    if (( argc - optind ) >= 1) {
+    if ((argc - optind) >= 1) {
         NSRange range = NSMakeRange(optind, argc - optind);
         return [arguments subarrayWithRange:range];
     } else {

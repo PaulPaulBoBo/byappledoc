@@ -253,13 +253,17 @@
 
 - (void)processParametersFromComment:(GBComment *)comment matchingMethod:(GBMethodData *)method {
     // This is where we validate comment parameters and sort them in proper order.
-    if (!comment || [comment.stringValue length] == 0 || comment.isCopied) return;
+    if (!comment || [comment.stringValue length] == 0 || comment.isCopied) {
+        return;
+    }
     GBLogDebug(@"Validating processed parameters...");
     
     // Prepare names of all argument variables from the method and parameter descriptions from the comment. Note that we don't warn about issues here, we'll handle missing parameters while sorting and unkown parameters at the end.
     NSMutableArray *names = [NSMutableArray arrayWithCapacity:[method.methodArguments count]];
     [method.methodArguments enumerateObjectsUsingBlock:^(GBMethodArgument *argument, NSUInteger idx, BOOL *stop) {
-        if (!argument.argumentVar) return;
+        if (!argument.argumentVar) {
+            return;
+        }
         [names addObject:argument.argumentVar];
         if (idx == [method.methodArguments count] - 1 && [argument isVariableArg]) [names addObject:@"..."];
     }];
@@ -301,7 +305,9 @@
 
 - (void)copyKnownDocumentationForMethod:(GBMethodData *)method {
     // Copies method documentation from known superclasses or adopted protocols.
-    if (!self.settings.findUndocumentedMembersDocumentation || [self isCommentValid:method.comment]) return;
+    if (!self.settings.findUndocumentedMembersDocumentation || [self isCommentValid:method.comment]) {
+        return;
+    }
     
     // First search within superclass hierarchy. This only works for classes.
     if ([method.parentObject isKindOfClass:[GBClassData class]]) {
@@ -337,8 +343,12 @@
 
 - (BOOL)removeUndocumentedObject:(id)object {
     // Removes the given top level object if it's not commented and all of it's methods are uncommented. Returns YES if the object was removed, NO otherwise.
-    if (self.settings.keepUndocumentedObjects) return NO;
-    if ([self isCommentValid:[(GBModelBase *)object comment]]) return NO;
+    if (self.settings.keepUndocumentedObjects) {
+        return NO;
+    }
+    if ([self isCommentValid:[(GBModelBase *)object comment]]) {
+        return NO;
+    }
     
     // Only remove if all methods are uncommented. Note that this also removes methods regardless of keepUndocumentedMembers setting, however if the object itself is commented, we'll keep methods.
     if([object conformsToProtocol:@protocol(GBObjectDataProviding)]) {
@@ -365,14 +375,18 @@
 
 - (BOOL)removeUndocumentedMember:(GBMethodData *)object {
     // Removes the given method if it's not commented and returns YES if removed, NO otherwise.
-    if (self.settings.keepUndocumentedMembers) return NO;
-    if ([self isCommentValid:object.comment]) return NO;
-
+    if (self.settings.keepUndocumentedMembers) {
+        return NO;
+    }
+    if ([self isCommentValid:object.comment]) {
+        return NO;
+    }
+    
     // Remove the method and all empty sections to cleanup the object for output generation.
     GBLogVerbose(@"Removing undocumented method %@...", object);
     GBMethodsProvider *provider = [(id<GBObjectDataProviding>)object.parentObject methods];
     [provider unregisterMethod:object];
-    [provider unregisterEmptySections];    
+    [provider unregisterEmptySections];
     return YES;
 }
 
@@ -395,7 +409,9 @@
 
 - (void)setupSuperclassForClass:(GBClassData *)class {
     // This setups super class links for known superclasses.
-    if ([class.nameOfSuperclass length] == 0) return;
+    if ([class.nameOfSuperclass length] == 0) {
+        return;
+    }
     GBClassData *superclass = [self.store classWithName:class.nameOfSuperclass];
     if (superclass) {
         GBLogDebug(@"Setting superclass link of %@ to %@...", class, superclass);
@@ -419,7 +435,9 @@
 
 - (void)mergeKnownCategoriesFromStore {
     GBLogInfo(@"Merging known categories to classes...");
-    if (!self.settings.mergeCategoriesToClasses) return;
+    if (!self.settings.mergeCategoriesToClasses) {
+        return;
+    }
     NSSet *categories = [self.store.categories copy];
     for (GBCategoryData *category in categories) {
         GBLogVerbose(@"Checking %@ for merging...", category);
@@ -474,11 +492,13 @@
         [classMethodProvider unregisterEmptySections];
         [self.store unregisterTopLevelObject:category];
     }
-}                               
+}
 #pragma mark Helper methods
 
 - (void)validateCommentsForObjectAndMembers:(GBModelBase *)object {
-    if (!object.includeInOutput) return;
+    if (!object.includeInOutput) {
+        return;
+    }
     
     // Checks if the object is commented and warns if not. This validates given object and all it's members comments! The reason for doing it together is due to the fact that we first process all members and then handle the object. At that point we can even remove the object if not documented. So we can't validate members before as we don't know whether they will be deleted together with their parent object too...
     if (![self isCommentValid:object.comment] && self.settings.warnOnUndocumentedObject) {
@@ -516,3 +536,4 @@
 @synthesize store;
 
 @end
+
