@@ -20,25 +20,26 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(GBStore, sharedStore);
     self = [super init];
     if (self) {
         _classes = [[NSMutableSet alloc] init];
-        _unDocClasses = [[NSMutableSet alloc] init];
         _classesByName = [[NSMutableDictionary alloc] init];
         _categories = [[NSMutableSet alloc] init];
-        _unDocCategories = [[NSMutableSet alloc] init];
         _categoriesByName = [[NSMutableDictionary alloc] init];
         _protocols = [[NSMutableSet alloc] init];
-        _unDocProtocols = [[NSMutableSet alloc] init];
         _protocolsByName = [[NSMutableDictionary alloc] init];
         _documents = [[NSMutableSet alloc] init];
         _documentsByName = [[NSMutableDictionary alloc] init];
         _typedefEnums = [[NSMutableSet alloc] init];
-        _unDocConstants = [[NSMutableSet alloc] init];
         _typedefEnumsByName = [[NSMutableDictionary alloc] init];
         _typedefBlocks = [[NSMutableSet alloc] init];
-        _unDocBlocks = [[NSMutableSet alloc] init];
         _typedefBlocksByName = [[NSMutableDictionary alloc] init];
         _customDocuments = [[NSMutableSet alloc] init];
         _customDocumentsByKey = [[NSMutableDictionary alloc] init];
         _methods = [[NSMutableArray alloc] init];
+        
+        _unDocClasses = [[NSMutableSet alloc] init];
+        _unDocCategories = [[NSMutableSet alloc] init];
+        _unDocProtocols = [[NSMutableSet alloc] init];
+        _unDocConstants = [[NSMutableSet alloc] init];
+        _unDocBlocks = [[NSMutableSet alloc] init];
         _unDocMethods = [[NSMutableArray alloc] init];
     }
     return self;

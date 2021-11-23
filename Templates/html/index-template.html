@@ -33,42 +33,67 @@
 			</nav>
 		</div>
 	</aside>
-    <div align="center">
-        <div id="mainchart" style="width:1000px;height:400px;padding-top:80px"></div>
-    </div>
-    <script type="text/javascript">
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('mainchart'));
-        
-        // 指定图表的配置项和数据
-        var option = {
-            title: {
-                text: '统计'
-            },
-            tooltip: {},
-            legend: {
-                data:['注释错误数']
-            },
-            xAxis: {
-                data: ["Class","Category","block","protocal","enum","methods"]
-            },
-            yAxis: {},
-            series: [{
-                name: '总数',
-                type: 'bar',
-                data: [{{page.classesTotal}}, {{page.categoriesTotal}}, {{page.blocksTotal}}, {{page.protocolsTotal}}, {{page.typedefEnumsTotal}}, {{page.methodsTotal}}]
-            },{
-                name: '错误数',
-                type: 'bar',
-                data: [{{page.unDocClassesTotal}}, {{page.unDocCategoriesTotal}}, {{page.unDocBlocksTotal}}, {{page.unDocProtocolsTotal}}, {{page.unDoctypedefEnumsTotal}}, {{page.unDocMethodsTotal}}]
-            }]
-        };
-        
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
-    </script>
 	<article>
-        
+		<div id="overview-contents" class="container">
+			<div id="content">
+				<h2 style="color: black;font-weight: 800;">主要统计</h2>
+				<div id="overview-contents" class="container"><p></p></div>
+				<p>Total（{{page.unDocTotal}}/{{page.total}}）</p>
+				<div class="Statisticscontainer">
+					<div class="Statisticsskills" style="width: {{page.totalPercent}}%;background-color: #cc3333;">{{page.totalPercent}}%</div>
+				</div>
+
+				<div id="overview-contents" class="container"><p></p></div>
+				<p>methods（{{page.unDocMethodsTotal}}/{{page.methodsTotal}}）</p>
+				<div class="Statisticscontainer">
+					<div class="Statisticsskills" style="width: {{page.methodsPercent}}%;background-color: #ccffff;">{{page.methodsPercent}}%</div>
+				</div>
+
+				<div id="overview-contents" class="container"><p></p></div>
+				<p>Class（{{page.unDocClassesTotal}}/{{page.classesTotal}}）</p>
+				<div class="Statisticscontainer">
+					<div class="Statisticsskills" style="width: {{page.classesPercent}}%;background-color: #ff9966;">{{page.classesPercent}}%</div>
+				</div>
+
+				<div id="overview-contents" class="container"><p></p></div>
+				<div id="overview-contents" class="container"><p></p></div>
+			</div>
+
+			<div id="mainchart" style="width:1000px;height:400px;padding-top:80px"></div>
+			<script type="text/javascript">
+				// 基于准备好的dom，初始化echarts实例
+				var myChart = echarts.init(document.getElementById('mainchart'));
+				
+				// 指定图表的配置项和数据
+				var option = {
+					title: {
+						text: '其他统计'
+					},
+					tooltip: {},
+					legend: {
+						data:['注释错误数']
+					},
+					xAxis: {
+						data: ["Category","block","protocal","enum"]
+					},
+					yAxis: {},
+					series: [{
+						name: '错误数',
+						type: 'bar',
+						data: [{{page.unDocCategoriesTotal}}, {{page.unDocBlocksTotal}}, {{page.unDocProtocolsTotal}}, {{page.unDoctypedefEnumsTotal}}]
+					},{
+						name: '总数',
+						type: 'bar',
+						data: [{{page.categoriesTotal}}, {{page.blocksTotal}}, {{page.protocolsTotal}}, {{page.typedefEnumsTotal}}]
+					}]
+				};
+				
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(option);
+			</script>
+		</div>
+	</article>
+	<article>
 		<div id="overview-contents" class="container">
 			<div id="content">
 				<main role="main">

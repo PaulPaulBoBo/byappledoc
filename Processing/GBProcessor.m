@@ -108,6 +108,7 @@
         GBLogInfo(@"Processing category %@...", category);
         self.currentContext = category;
         [self processMethodsFromProvider:category.methods];
+        [self.store.methods addObjectsFromArray:category.methods.methods];
         if (![self removeUndocumentedObject:category]) {
             [self processCommentForObject:category];
             [self validateCommentsForObjectAndMembers:category];
@@ -127,6 +128,7 @@
         GBLogInfo(@"Processing protocol %@...", protocol);
         self.currentContext = protocol;
         [self processMethodsFromProvider:protocol.methods];
+        [self.store.methods addObjectsFromArray:protocol.methods.methods];
         if (![self removeUndocumentedObject:protocol]) {
             [self processCommentForObject:protocol];
             [self validateCommentsForObjectAndMembers:protocol];

@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 
 	<title>{{page.title}}</title>
-
+	<script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
 	<link rel="stylesheet" href="css/undocstyle.css">
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
 	{{#strings.appledocData}}<meta name="generator" content="{{tool}} {{version}} (build {{build}})">{{/strings.appledocData}}
@@ -33,55 +33,67 @@
 			</nav>
 		</div>
 	</aside>
-
 	<article>
-        
-        <div id="overview-contents" class="container"><p></p></div>
-        <div id="overview-contents" class="container"><p></p></div>
-        <div id="overview-contents" class="container"><p></p></div>
-        <div id="overview-contents" class="container"><p></p></div>
-        <div id="overview-contents" class="container"><p></p></div>
-        <div id="overview-contents" class="container" style="background-color: #ffffff;">
-            <h4>统计信息（绿色代表注释没有问题的比例）</h4>
-            
-            <p>Total（{{page.unDocTotal}}/{{page.total}}）</p>
-            <div class="Statisticscontainer">
-                <div class="Statisticsskills" style="width: {{page.totalPercent}}%;background-color: #cc3333;">{{page.totalPercent}}%</div>
-            </div>
-            
-            <p>Class（{{page.unDocClassesTotal}}/{{page.classesTotal}}）</p>
-            <div class="Statisticscontainer">
-                <div class="Statisticsskills" style="width: {{page.classesPercent}}%;background-color: #ff9966;">{{page.classesPercent}}%</div>
-            </div>
-            <p>Category（{{page.unDocCategoriesTotal}}/{{page.categoriesTotal}}）</p>
-            <div class="Statisticscontainer">
-                <div class="Statisticsskills" style="width: {{page.blocksPercent}}%;background-color: #ff6666;">{{page.categoriesPercent}}%</div>
-            </div>
-            <p>block（{{page.unDocBlocksTotal}}/{{page.blocksTotal}}）</p>
-            <div class="Statisticscontainer">
-                <div class="Statisticsskills" style="width: {{page.blocksPercent}}%;background-color: #cc9966;">{{page.blocksPercent}}%</div>
-            </div>
-            <p>protocal（{{page.unDocProtocolsTotal}}/{{page.protocolsTotal}}）</p>
-            <div class="Statisticscontainer">
-                <div class="Statisticsskills" style="width: {{page.protocolsPercent}}%;background-color: #ffcc99;">{{page.protocolsPercent}}%</div>
-            </div>
-            <p>enum（{{page.unDoctypedefEnumsTotal}}/{{page.typedefEnumsTotal}}）</p>
-            <div class="Statisticscontainer">
-                <div class="Statisticsskills" style="width: {{page.typedefEnumsPercent}}%;background-color: #996699;">{{page.typedefEnumsPercent}}%</div>
-            </div>
-            <p>methods（{{page.unDocMethodsTotal}}/{{page.methodsTotal}}）</p>
-            <div class="Statisticscontainer">
-                <div class="Statisticsskills" style="width: {{page.methodsPercent}}%;background-color: #ccffff;">{{page.methodsPercent}}%</div>
-            </div>
-            
-            <div id="overview-contents" class="container"><p></p></div>
-            <div id="overview-contents" class="container"><p></p></div>
-        </div>
-        
-        <div id="overview-contents" class="container"><p></p></div>
-        <div id="overview-contents" class="container"><p></p></div>
-        <div id="overview-contents" class="container"><p></p></div>
-        
+		<div id="overview-contents" class="container">
+			<div id="content">
+				<h2 style="color: black;font-weight: 800;">主要统计</h2>
+				<div id="overview-contents" class="container"><p></p></div>
+				<p>Total（{{page.unDocTotal}}/{{page.total}}）</p>
+				<div class="Statisticscontainer">
+					<div class="Statisticsskills" style="width: {{page.totalPercent}}%;background-color: #cc3333;">{{page.totalPercent}}%</div>
+				</div>
+
+				<div id="overview-contents" class="container"><p></p></div>
+				<p>methods（{{page.unDocMethodsTotal}}/{{page.methodsTotal}}）</p>
+				<div class="Statisticscontainer">
+					<div class="Statisticsskills" style="width: {{page.methodsPercent}}%;background-color: #ccffff;">{{page.methodsPercent}}%</div>
+				</div>
+
+				<div id="overview-contents" class="container"><p></p></div>
+				<p>Class（{{page.unDocClassesTotal}}/{{page.classesTotal}}）</p>
+				<div class="Statisticscontainer">
+					<div class="Statisticsskills" style="width: {{page.classesPercent}}%;background-color: #ff9966;">{{page.classesPercent}}%</div>
+				</div>
+
+				<div id="overview-contents" class="container"><p></p></div>
+				<div id="overview-contents" class="container"><p></p></div>
+			</div>
+
+			<div id="mainchart" style="width:1000px;height:400px;padding-top:80px"></div>
+			<script type="text/javascript">
+				// 基于准备好的dom，初始化echarts实例
+				var myChart = echarts.init(document.getElementById('mainchart'));
+				
+				// 指定图表的配置项和数据
+				var option = {
+					title: {
+						text: '其他统计'
+					},
+					tooltip: {},
+					legend: {
+						data:['注释错误数']
+					},
+					xAxis: {
+						data: ["Category","block","protocal","enum"]
+					},
+					yAxis: {},
+					series: [{
+						name: '错误数',
+						type: 'bar',
+						data: [{{page.unDocCategoriesTotal}}, {{page.unDocBlocksTotal}}, {{page.unDocProtocolsTotal}}, {{page.unDoctypedefEnumsTotal}}]
+					},{
+						name: '总数',
+						type: 'bar',
+						data: [{{page.categoriesTotal}}, {{page.blocksTotal}}, {{page.protocolsTotal}}, {{page.typedefEnumsTotal}}]
+					}]
+				};
+				
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(option);
+			</script>
+		</div>
+	</article>
+	<article>        
 		<div id="overview-contents" class="container">
 			<div id="content">
 				<main role="main">

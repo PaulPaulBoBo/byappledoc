@@ -22,25 +22,26 @@
 @interface GBStore :NSObject{
     @private
     NSMutableSet *_classes;
-    NSMutableSet *_unDocClasses;
     NSMutableDictionary *_classesByName;
-    NSMutableSet *_categories;
-    NSMutableSet *_unDocCategories;
     NSMutableDictionary *_categoriesByName;
     NSMutableSet *_protocols;
-    NSMutableSet *_unDocProtocols;
     NSMutableDictionary *_protocolsByName;
     NSMutableSet *_documents;
     NSMutableDictionary *_documentsByName;
     NSMutableSet *_typedefEnums;
-    NSMutableSet *_unDocConstants;
     NSMutableDictionary *_typedefEnumsByName;
     NSMutableSet *_typedefBlocks;
-    NSMutableSet *_unDocTypedefBlocks;
     NSMutableDictionary *_typedefBlocksByName;
     NSMutableSet *_customDocuments;
     NSMutableDictionary *_customDocumentsByKey;
     NSMutableArray *_methods;
+    
+    NSMutableSet *_unDocClasses;
+    NSMutableSet *_categories;
+    NSMutableSet *_unDocCategories;
+    NSMutableSet *_unDocProtocols;
+    NSMutableSet *_unDocConstants;
+    NSMutableSet *_unDocBlocks;
     NSMutableArray *_unDocMethods;
 }
 
