@@ -217,6 +217,7 @@
 		425CC23020488D630099B364 /* GBMarkdownOutputGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GBMarkdownOutputGenerator.m; sourceTree = "<group>"; };
 		493739BF5A98CB9200764326 /* libPods-appledoc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-appledoc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C75E5BD2E1BFF5CD130FE5A /* Pods-appledoc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-appledoc.debug.xcconfig"; path = "Pods/Target Support Files/Pods-appledoc/Pods-appledoc.debug.xcconfig"; sourceTree = "<group>"; };
+		5A525AB527D0B37F00B8E6FC /* markdown-template.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "markdown-template.md"; sourceTree = "<group>"; };
 		720DA055AE3DBDBE5E8FF024 /* libPods-AppledocTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AppledocTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7307B310124A1929007EC6B8 /* GBObjectiveCParser-SectionsParsingTesting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GBObjectiveCParser-SectionsParsingTesting.m"; sourceTree = "<group>"; };
 		7307B318124A1C2E007EC6B8 /* GBMethodSectionData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBMethodSectionData.h; sourceTree = "<group>"; };
@@ -507,6 +508,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5A525AB427D0B37F00B8E6FC /* markdown */ = {
+			isa = PBXGroup;
+			children = (
+				5A525AB527D0B37F00B8E6FC /* markdown-template.md */,
+			);
+			path = markdown;
+			sourceTree = "<group>";
+		};
 		7340F0AB11FCC87300E712A4 /* Testing */ = {
 			isa = PBXGroup;
 			children = (
@@ -545,6 +554,7 @@
 		739AD36F1254449D00B642C3 /* Templates */ = {
 			isa = PBXGroup;
 			children = (
+				5A525AB427D0B37F00B8E6FC /* markdown */,
 				F59056EC16C1C6DC00391620 /* publish */,
 				7367298112A3BD9D00879D1B /* docset */,
 				73D2524312A2EA340024F9F9 /* html */,

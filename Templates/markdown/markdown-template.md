@@ -99,7 +99,7 @@
 
 
 Section ObjectSpecification
-&nbsp;&nbsp;**{{title}}** {{#values}}{{#href}}<a href="{{&href}}">{{/href}}{{string}}{{#href}}</a>{{/href}}{{&delimiter}}  
+  **{{title}}** {{#values}}{{#href}}<a href="{{&href}}">{{/href}}{{string}}{{#href}}</a>{{/href}}{{&delimiter}}  
 {{/values}}
 EndSection
 
@@ -125,7 +125,7 @@ Section TaskMethod
 EndSection
 
 Section TaskSelector
-{{#isInstanceMethod}}&ndash;&nbsp;{{/isInstanceMethod}}{{#isClassMethod}}+&nbsp;{{/isClassMethod}}{{#isProperty}}&nbsp;&nbsp;{{/isProperty}}{{methodSelector}}
+{{#isInstanceMethod}}&ndash; {{/isInstanceMethod}}{{#isClassMethod}}+ {{/isClassMethod}}{{#isProperty}}  {{/isProperty}}{{methodSelector}}
 EndSection
 
 
@@ -143,7 +143,7 @@ Section Method
 #### {{strings.objectMethods.parametersTitle}}
 {{#methodParameters}}
 *{{argumentName}}*  
-&nbsp;&nbsp;&nbsp;{{#argumentDescription}}{{>GBCommentComponentsList}}{{/argumentDescription}}  
+   {{#argumentDescription}}{{>GBCommentComponentsList}}{{/argumentDescription}}  
 {{/methodParameters}}
 {{/hasMethodParameters}}
 {{#hasMethodResult}}
@@ -162,7 +162,7 @@ Section Method
 #### {{strings.objectMethods.exceptionsTitle}}
 {{#methodExceptions}}
 *{{argumentName}}*  
-&nbsp;&nbsp;&nbsp;{{#argumentDescription}}{{>GBCommentComponentsList}}{{/argumentDescription}}  
+   {{#argumentDescription}}{{>GBCommentComponentsList}}{{/argumentDescription}}  
 {{/methodExceptions}}
 {{/hasMethodExceptions}}
 {{#hasRelatedItems}}
@@ -194,7 +194,7 @@ Available in {{#availability}}{{#components}}{{stringValue}}{{/components}}{{/av
 {{/hasAvailability}}
 {{/comment}}
 {{#prefferedSourceInfo}}
-&nbsp;&nbsp;&nbsp;{{strings.objectMethods.declaredInTitle}} `{{filename}}`.
+   {{strings.objectMethods.declaredInTitle}} `{{filename}}`.
 {{/prefferedSourceInfo}}
 EndSection
 
